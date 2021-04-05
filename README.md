@@ -7,6 +7,9 @@
 	1. Executive
 	1. Senior
 - Consults can charge whatever price they want 
-- Company takes **5% commission** from **Senior Consultants**, Company takes **10% commision** from **Executive Consultants** and **5% commision** from **Junior Consultants**
+- Company takes 
+	1. **5% commision** from **Junior Consultants**
+	1. **10% commision** from **Executive Consultants** 
+	1. **15% commission** from **Senior Consultants**
 
 

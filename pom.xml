@@ -11,6 +11,8 @@
     <properties>
         <junit-jupiter.version>5.6.0</junit-jupiter.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <parent>
@@ -110,16 +112,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M3</version>
-            </plugin>
+                <version>2.22.2</version>
+           </plugin>
 
-            <!-- optional, for mvn site -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
-            </plugin>
-
+        
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -13,3 +13,8 @@
 	1. **15% commission** from **Senior Consultants**
 
 
+
+# Initial idea of design of seperate micro-services
+
+![microservices-consultancy (2)](https://user-images.githubusercontent.com/36232533/113938052-59414500-97fa-11eb-9d41-a4fb6736ee87.png)
+

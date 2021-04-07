@@ -1,4 +1,4 @@
-package consultancyservices.registration.models;
+package com.consultancyservices.registration.models;
 
 import javax.validation.constraints.*;
 

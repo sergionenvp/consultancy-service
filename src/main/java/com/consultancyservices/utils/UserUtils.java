@@ -1,4 +1,4 @@
-package consultancyservices.utils;
+package com.consultancyservices.utils;
 
 import org.springframework.stereotype.Component;
 

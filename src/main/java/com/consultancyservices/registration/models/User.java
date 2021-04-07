@@ -1,4 +1,4 @@
-package consultancyservices.registration.models;
+package com.consultancyservices.registration.models;
 
 public class User {
 

@@ -1,8 +1,8 @@
-package consultancyservices.registration.controllers;
+package com.consultancyservices.registration.controllers;
 
+import com.consultancyservices.registration.models.UserRequest;
+import com.consultancyservices.registration.models.UserResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import consultancyservices.registration.models.UserRequest;
-import consultancyservices.registration.models.UserResponse;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;

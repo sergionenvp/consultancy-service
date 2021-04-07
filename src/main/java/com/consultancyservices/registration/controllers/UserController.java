@@ -1,7 +1,7 @@
-package consultancyservices.registration.controllers;
+package com.consultancyservices.registration.controllers;
 
-import consultancyservices.registration.models.UserRequest;
-import consultancyservices.registration.models.UserResponse;
+import com.consultancyservices.registration.models.UserRequest;
+import com.consultancyservices.registration.models.UserResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

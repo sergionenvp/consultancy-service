@@ -4,13 +4,10 @@ import org.junit.jupiter.api.*;
 
 public class RegistrationRequestTests {
     RegistrationRequest registrationRequest;
-    int age;
-    String fullName;
+
     @BeforeEach
     public  void setup() {
         registrationRequest = new RegistrationRequest("Andre Vella",18);
-        age=0;
-        fullName=" ";
 
     }
     @AfterEach
@@ -23,7 +20,7 @@ public class RegistrationRequestTests {
     public void testRequestCreation() {
 
         String fullName = registrationRequest.getFullName();
-        age = registrationRequest.getAge();
+        int age = registrationRequest.getAge();
         Assertions.assertEquals("Andre Vella",fullName);
         Assertions.assertEquals(18,age);
 
@@ -31,7 +28,7 @@ public class RegistrationRequestTests {
     @Test
     public void testRequestSetAgeMethod(){
         registrationRequest.setAge(20);
-        age = registrationRequest.getAge();
+        int age = registrationRequest.getAge();
         Assertions.assertEquals(20,age);
 
 
@@ -43,7 +40,7 @@ public class RegistrationRequestTests {
         registrationRequest.setFullName("Sergio P.");
         registrationRequest.setFullName("Kelsey M.");
 
-        fullName = registrationRequest.getFullName();
+        String fullName = registrationRequest.getFullName();
         Assertions.assertEquals("Kelsey M.",fullName);
 
 

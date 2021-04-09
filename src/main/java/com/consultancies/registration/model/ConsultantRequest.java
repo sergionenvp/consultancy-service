@@ -1,9 +1,9 @@
 package com.consultancies.registration.model;
 
-public class RegistrationResponse {
+public class ConsultantRequest {
     private String fullName;
     private int age;
-    public RegistrationResponse(String fullName,int age){
+    public ConsultantRequest(String fullName, int age){
         this.fullName=fullName;
         this.age=age;
 
@@ -12,4 +12,6 @@ public class RegistrationResponse {
     public void setFullName(String  fullName){this.fullName=fullName;}
     public int getAge(){return  age;}
     public void setAge(int age){this.age=age;}
+
+
 }

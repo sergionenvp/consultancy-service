@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ConsultantTests {
+
     ConsultantRequest consultantRequest;
     ConsultantResponse consultantResponse;
     @BeforeEach
@@ -56,8 +57,6 @@ public class ConsultantTests {
         consultantResponse.setAge(age);
         Assertions.assertEquals("Andre Vella", consultantResponse.getFullName());
         Assertions.assertEquals(25, consultantResponse.getAge());
-
-
 
     }
 

@@ -1,4 +1,4 @@
-package com.consultancies.registration.model;
+package com.consultancies.consultants.model;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +11,7 @@ public class ConsultantTests {
     @BeforeEach
     public void setup(){
         consultantRequest = new ConsultantRequest("Andre Vella",18);
-        consultantResponse = new ConsultantResponse("Kelsey Marie",18);
+        consultantResponse = new ConsultantResponse(1,"Kelsey Marie",18);
     }
     @AfterEach
     public void teardown() {

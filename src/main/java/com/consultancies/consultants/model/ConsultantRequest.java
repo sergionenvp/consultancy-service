@@ -1,4 +1,4 @@
-package com.consultancies.registration.model;
+package com.consultancies.consultants.model;
 
 public class ConsultantRequest {
     private String fullName;

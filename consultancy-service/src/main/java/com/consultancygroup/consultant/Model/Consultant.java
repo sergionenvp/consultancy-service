@@ -1,16 +1,16 @@
 package com.consultancygroup.consultant.Model;
-import jdk.jfr.DataAmount;
+
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.aspectj.bridge.IMessage;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
+
 import java.io.Serializable;
 
 
@@ -20,7 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Consultant implements Serializable {
+public class    Consultant implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,12 +33,17 @@ public class Consultant implements Serializable {
     @Max(value = 70, message = "Bad request: age more than 70")
     @javax.validation.constraints.NotNull(message = "Bad request: age null")
     private int age;
+
+    //consultantPhoneNumber unique
+    @Column(unique = true)
+    private int phoneNumber;
     private  ConsultantResume consultantResume;
 
-    public Consultant(String fullName, int age, ConsultantResume consultantResume) {
+    public Consultant(String fullName, int age, int phoneNumber, ConsultantResume consultantResume) {
         this.fullName=fullName;
         this.age=age;
         this.consultantResume=consultantResume;
+        this.phoneNumber=phoneNumber;
     }
 
 }

@@ -32,8 +32,8 @@ public class ConsultantControllerTest {
     @Test
     public void testSaveUserValidConsultant() throws  Exception{
         // Arrange
-        Consultant request = new Consultant(1L,"Andre", 20, ConsultantResume.JUNIOR);
-        Consultant expectedResponse = new Consultant(1L,"Andre", 20, ConsultantResume.JUNIOR);
+        Consultant request = new Consultant(1L,"Andre", 20, 79663256,ConsultantResume.JUNIOR);
+        Consultant expectedResponse = new Consultant(1L,"Andre", 20,79663256, ConsultantResume.JUNIOR);
         when(consultantMockService.saveConsultant(any(Consultant.class))).thenReturn(expectedResponse);
         String endpoint = "/consultant";
         ResponseEntity<String> responseEntity =
@@ -46,8 +46,8 @@ public class ConsultantControllerTest {
     @Test
     public void testUserUnderAge() throws  Exception{
         // Arrange
-        Consultant request = new Consultant(1L,"Andre", 17, ConsultantResume.JUNIOR);
-        Consultant expectedResponse = new Consultant(1L,"Andre", 17, ConsultantResume.JUNIOR);
+        Consultant request = new Consultant(1L,"Andre", 17, 79663256, ConsultantResume.JUNIOR);
+        Consultant expectedResponse = new Consultant(1L,"Andre", 17, 79663256, ConsultantResume.JUNIOR);
         when(consultantMockService.saveConsultant(any(Consultant.class))).thenReturn(expectedResponse);
         String endpoint = "/consultant";
         ResponseEntity<String> responseEntity =
@@ -58,8 +58,8 @@ public class ConsultantControllerTest {
     @Test
     public void testUserOverAge() throws  Exception{
         // Arrange
-        Consultant request = new Consultant(1L,"Andre", 90, ConsultantResume.JUNIOR);
-        Consultant expectedResponse = new Consultant(1L,"Andre", 90, ConsultantResume.JUNIOR);
+        Consultant request = new Consultant(1L,"Andre", 90 , 79663256,ConsultantResume.JUNIOR);
+        Consultant expectedResponse = new Consultant(1L,"Andre", 90, 79663256, ConsultantResume.JUNIOR);
         when(consultantMockService.saveConsultant(any(Consultant.class))).thenReturn(expectedResponse);
         String endpoint = "/consultant";
         ResponseEntity<String> responseEntity =

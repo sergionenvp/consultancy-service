@@ -9,8 +9,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,4 +60,38 @@ public class ConsultantService {
     public void deleteAllConsultants() {
         consultantRepository.deleteAll();
     }
+
+    public List<Consultant> getConsultantsOlderThanMinAge(int age) {
+        return consultantRepository.findAllByAgeAfter(age);
+    }
+
+    public void export(List<Consultant> consultants) {
+        try
+        {
+            FileOutputStream fos = new FileOutputStream("consultant");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(consultants);
+            oos.close();
+            fos.close();
+        }
+        catch (IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
+    }
+
+    public List<Consultant> importConsultant() {
+        List<Consultant> consultants = new LinkedList<Consultant>();
+        try {
+            FileInputStream in = new FileInputStream("consultant");
+            ObjectInputStream ois = new ObjectInputStream(in);
+            consultants = (List<Consultant>) (ois.readObject());
+        } catch (Exception e) {
+            System.out.println("Problem serializing: " + e);
+        }
+        return  consultants;
+
+    }
+
+
 }

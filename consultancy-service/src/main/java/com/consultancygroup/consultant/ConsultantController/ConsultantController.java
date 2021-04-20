@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -29,6 +28,7 @@ public class ConsultantController {
     public Consultant getConsultantById(@PathVariable("id") Long consultantId) {
         return  consultantService.findConsultantById(consultantId);
     }
+
 
     @GetMapping("/consultant/fullName/{fullName}")
     public List<Consultant> getConsultantByFullName(@PathVariable("fullName") String fullName) {
@@ -55,6 +55,10 @@ public class ConsultantController {
         consultantService.deleteAllConsultants();
     }
 
+    @GetMapping("/consultant/ageMinimum/{age}")
+    public List<Consultant> getConsultantsOlderThanMinAge(@PathVariable("age") int age) {
+        return  consultantService.getConsultantsOlderThanMinAge(age);
+    }
 
 
 
@@ -63,21 +67,10 @@ public class ConsultantController {
     @GetMapping("/consultant/export")
     public void write(){
         List<Consultant> consultants = consultantService.findAll();
-        try
-        {
-            FileOutputStream fos = new FileOutputStream("consultant");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(consultants);
-            oos.close();
-            fos.close();
-        }
-        catch (IOException ioe)
-        {
-            ioe.printStackTrace();
-        }
+        consultantService.export(consultants);
+
 
     }
-
 
 
 

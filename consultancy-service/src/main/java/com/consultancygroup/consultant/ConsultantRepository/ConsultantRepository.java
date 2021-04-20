@@ -31,5 +31,5 @@ public interface ConsultantRepository extends JpaRepository<Consultant, Long> {
     @Override
     void deleteAll();
 
-
+    List<Consultant> findAllByAgeAfter(int age);
 }

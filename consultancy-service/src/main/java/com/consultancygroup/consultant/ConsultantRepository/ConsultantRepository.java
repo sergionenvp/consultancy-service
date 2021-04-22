@@ -15,9 +15,6 @@ public interface ConsultantRepository extends JpaRepository<Consultant, Long> {
 
 
     Consultant findByConsultantId(Long consultantId);
-
-
-
     List<Consultant> findAllByFullName(String fullName);
 
 

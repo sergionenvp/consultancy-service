@@ -1,5 +1,6 @@
 package com.consultancygroup.consultant.ConsultantController;
 import com.consultancygroup.consultant.ConsultantService.ConsultantService;
+import com.consultancygroup.consultant.Exceptions.ConsultantNotFoundException;
 import com.consultancygroup.consultant.Model.Consultant;
 import com.consultancygroup.consultant.Model.ConsultantResume;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,22 @@ public class ConsultantController {
         return  consultantService.saveConsultant(consultant);
     }
 
-    @RequestMapping("/consultant/id/{id}")
+    @GetMapping("/consultant/id/{id}")
     public Consultant getConsultantById(@PathVariable("id") Long consultantId) {
-        return  consultantService.findConsultantById(consultantId);
+        Consultant consultant = consultantService.findConsultantById(consultantId);
+        if (consultant == null) {
+            throw new ConsultantNotFoundException(consultantId);
+        }
+
+        return  consultant;
+
+
+
     }
 
 
     @GetMapping("/consultant/fullName/{fullName}")
+    @ResponseStatus(HttpStatus.CREATED)
     public List<Consultant> getConsultantByFullName(@PathVariable("fullName") String fullName) {
         return  consultantService.findAllByFullName(fullName);
     }
@@ -71,6 +81,9 @@ public class ConsultantController {
 
 
     }
+
+
+
 
 
 

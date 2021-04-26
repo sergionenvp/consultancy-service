@@ -5,11 +5,11 @@ import com.consultancygroup.accountancy.accountancyService.AccountancyService;
 import com.consultancygroup.accountancy.model.Payment;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,8 +21,12 @@ public class AccountancyController {
     @Autowired
     ModelMapper modelMapper;
 
-    Payment createPayment(){
-        return null;
+    @PostMapping("/payments")
+    @ResponseStatus(HttpStatus.CREATED)
+    Payment newPayment(@Valid @RequestBody Payment paymentRequest){
+        Payment createdPayment = modelMapper.map(paymentRequest, Payment.class);
+        createdPayment = accountancyService.savePayment(createdPayment);
+        return createdPayment;
     }
 
     void cancelPaymentById(Long id){

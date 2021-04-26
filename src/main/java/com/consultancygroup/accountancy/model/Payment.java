@@ -3,6 +3,7 @@ package com.consultancygroup.accountancy.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 @Entity
@@ -15,6 +16,8 @@ public class Payment {
     private String cardHolderName;
     private Date date;
     private String cvc;
+
+    @Min(value = 0, message = "The price must be a positive, it cannot be negative below 0.")
     private double price;
 
     public Payment(){

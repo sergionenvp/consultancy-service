@@ -5,9 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ConsultantNotFoundException extends RuntimeException {
+public class ConsultantNameNotFoundException extends RuntimeException {
 
-    public ConsultantNotFoundException(Long id) {
-        super("Consultant with ID '" + id + "' not found.");
+    public ConsultantNameNotFoundException(String name) {
+        super("Consultant with name:" + name + "' not found.");
     }
+
 }

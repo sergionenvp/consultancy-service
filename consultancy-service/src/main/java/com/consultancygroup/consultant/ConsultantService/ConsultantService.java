@@ -30,22 +30,23 @@ public class ConsultantService {
         return consultantRepository.save(consultant);
     }
 
+    //tested
     public Consultant findConsultantById(Long consultantId) {
         return consultantRepository.findByConsultantId(consultantId);
     }
 
 
-
+//tested
     public List<Consultant> findAllByFullName(String fullName) {
         return consultantRepository.findAllByFullName(fullName);
 
     }
-
+//tested
     public List<Consultant> findAllByConsultantResume(ConsultantResume consultantResume) {
         return consultantRepository.findAllByConsultantResume(consultantResume);
 
     }
-
+//tested
     public List<Consultant> findAll() {
 
         return consultantRepository.findAll();
@@ -61,37 +62,14 @@ public class ConsultantService {
         consultantRepository.deleteAll();
     }
 
+
     public List<Consultant> getConsultantsOlderThanMinAge(int age) {
         return consultantRepository.findAllByAgeAfter(age);
     }
 
-    public void export(List<Consultant> consultants) {
-        try
-        {
-            FileOutputStream fos = new FileOutputStream("consultant");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(consultants);
-            oos.close();
-            fos.close();
-        }
-        catch (IOException ioe)
-        {
-            ioe.printStackTrace();
-        }
-    }
 
-    public List<Consultant> importConsultant() {
-        List<Consultant> consultants = new LinkedList<Consultant>();
-        try {
-            FileInputStream in = new FileInputStream("consultant");
-            ObjectInputStream ois = new ObjectInputStream(in);
-            consultants = (List<Consultant>) (ois.readObject());
-        } catch (Exception e) {
-            System.out.println("Problem serializing: " + e);
-        }
-        return  consultants;
 
-    }
+
 
 
 }

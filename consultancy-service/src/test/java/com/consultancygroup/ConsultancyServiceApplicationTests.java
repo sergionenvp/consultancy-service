@@ -8,6 +8,7 @@ class ConsultancyServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

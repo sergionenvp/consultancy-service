@@ -5,6 +5,7 @@ import com.consultancygroup.consultant.ConsultantRepository.ConsultantRepository
 import com.consultancygroup.consultant.ConsultantService.ConsultantService;
 import com.consultancygroup.consultant.Model.Consultant;
 import com.consultancygroup.consultant.Model.ConsultantResume;
+import com.consultancygroup.consultant.Serialisation.Serialisation;
 import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.h2.command.Command;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class ConsultancyServiceApplication {
 	public CommandLineRunner demo(ConsultantRepository consultantRepository) {
 		return (args) -> {
 			// save a few customers
-
-			List<Consultant> consultants = consultantService.importConsultant();
+			Serialisation serialisation = new Serialisation();
+			List<Consultant> consultants = serialisation.importConsultant();
 
 
 

@@ -1,7 +1,5 @@
 package com.consultancygroup.accountancy.accountancyController;
 
-
-
 import com.consultancygroup.accountancy.accountancyService.AccountancyService;
 import com.consultancygroup.accountancy.model.Payment;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,13 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -39,7 +39,6 @@ public class AccountancyControllerTest {
 
     @Test
     public void testCreateValidPayment() throws JsonProcessingException, JSONException {
-
         Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 2);
         Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", 2);
 
@@ -59,7 +58,6 @@ public class AccountancyControllerTest {
 
     @Test
     public void testCreatePaymentWithNegativePrice() throws JsonProcessingException, JSONException {
-
         Payment payment = new Payment(1L, "Sergio", "12212", null, "334", -3);
         Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", -3);
 
@@ -72,12 +70,11 @@ public class AccountancyControllerTest {
 
     @Test
     public void testCreatePaymentWithPriceEqualsTo0() throws JsonProcessingException, JSONException {
-
-        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 0);
+        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", 0);
         Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", 0);
 
         String endpoint = "/payments";
-        String expectedBody = om.writeValueAsString(expectedPayment);
+        String expectedJSONBody = om.writeValueAsString(expectedPayment);
 
         Payment servicePayment = new Payment(1L, "Sergio", "12212", null, "334", 0);
         when(accountancyMockService.savePayment(any(Payment.class))).thenReturn(servicePayment);
@@ -85,6 +82,58 @@ public class AccountancyControllerTest {
         ResponseEntity<String> responseEntity = testRestTemplate.postForEntity(endpoint, payment, String.class);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        JSONAssert.assertEquals(expectedBody, responseEntity.getBody(), true);
+        JSONAssert.assertEquals(expectedJSONBody, responseEntity.getBody(), true);
     }
+
+    @Test
+    public void testGetPaymentByIdValidId() throws JsonProcessingException, JSONException {
+        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", 0);
+
+        String expectedJSONResponseBody = om.writeValueAsString(payment);
+        String endpoint = "/payments/" + payment.getId();
+
+        Payment servicePayment = new Payment(1L,"Sergio", "12212", null, "334", 0);
+        when(accountancyMockService.getPaymentById(any(Long.class))).thenReturn(servicePayment);
+
+        ResponseEntity<String> responsePayment = testRestTemplate.getForEntity(endpoint, String.class);
+
+        assertEquals(HttpStatus.OK, responsePayment.getStatusCode());
+        JSONAssert.assertEquals(expectedJSONResponseBody, responsePayment.getBody(), true);
+    }
+
+    @Test
+    public void testGetAllPaymentsValidPayments() throws JsonProcessingException, JSONException {
+        Payment payment1 = new Payment(1L,"Sergio", "12212", null, "334", 0);
+        Payment payment2 = new Payment(2L,"Sara", "8899", null, "334", 20);
+        Payment payment3 = new Payment(3L,"Ana", "12332322", null, "334", 10);
+        List<Payment> payments = new ArrayList<Payment>(){ {add(payment1); add(payment2); add(payment3);} };
+        String expectedJSONPayments = om.writeValueAsString(payments);
+
+        List<Payment> servicePayments = new ArrayList<Payment>(){ {add(payment1); add(payment2); add(payment3);} };
+        when(accountancyMockService.getAllPayments()).thenReturn(servicePayments);
+
+        String endpoint = "/payments/all";
+        ResponseEntity<String> responsePayments = testRestTemplate.getForEntity(endpoint, String.class);
+
+        assertEquals(HttpStatus.OK, responsePayments.getStatusCode());
+        JSONAssert.assertEquals(expectedJSONPayments, responsePayments.getBody(), true);
+    }
+
+    @Test
+    public void testDeleteValidPaymentById() {
+        doNothing().when(accountancyMockService).deletePaymentById(1L);
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(null, new HttpHeaders());
+
+        String endpoint = "/payments/1";
+
+        testRestTemplate.delete(endpoint);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(endpoint, HttpMethod.DELETE, httpEntity, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        verify(accountancyMockService, times(1)).deletePaymentById(1L);
+    }
+
 }

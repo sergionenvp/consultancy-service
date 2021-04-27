@@ -5,14 +5,16 @@ import com.consultancygroup.accountancy.accountancyService.AccountancyService;
 import com.consultancygroup.accountancy.model.Payment;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@Transactional
 public class AccountancyController {
 
     @Autowired
@@ -29,16 +31,30 @@ public class AccountancyController {
         return createdPayment;
     }
 
-    void cancelPaymentById(Long id){
-
+    @DeleteMapping("/payment/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void deletePaymentById(@PathVariable Long id){
+        accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
+        accountancyService.deletePaymentById(id);
     }
 
-    List<Payment> showPayments(){
-        return null;
+    @GetMapping("payments/all")
+    @ResponseStatus(HttpStatus.OK)
+    List<Payment> getAllPayments(){
+        //accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
+        //accountancyService.savePayment(new Payment(2L,"Sara", "12212", null, "334", 0));
+        //accountancyService.savePayment(new Payment(3L,"Ana", "w43634", null, "334", 0));
+        return accountancyService.getAllPayments();
     }
 
-    Payment showSpecificPaymentById(Long id){
-        return null;
+    @GetMapping("payments/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    Payment getPaymentById(@PathVariable("id") Long id){
+        //accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
+        //accountancyService.savePayment(new Payment(2L,"Sergio", "12212", null, "334", 0));
+        //accountancyService.savePayment(new Payment(3L,"Ana", "12212", null, "334", 0));
+        Payment payment = accountancyService.getPaymentById(id);
+        return payment;
     }
 
 

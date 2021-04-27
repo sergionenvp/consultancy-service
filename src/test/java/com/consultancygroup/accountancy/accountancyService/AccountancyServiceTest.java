@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -31,8 +33,11 @@ public class AccountancyServiceTest {
 
     @Test
     public void testSavePayment(){
-        Payment paymentToBeSaved = new Payment(1L, "Sergio", "12212", null, "334", 3);
+        Payment paymentToBeSaved = new Payment(1L,"Sergio", "12212", null, "334", 3);
         Payment expectedSavedPayment = new Payment(1L, "Sergio", "12212", null, "334", 3);
+
+        Payment paymentService = new Payment(1L, "Sergio", "12212", null, "334", 3);
+        when(accountancyService.savePayment(any(Payment.class))).thenReturn(paymentService);
 
         Payment savedPayment = accountancyService.savePayment(paymentToBeSaved);
 

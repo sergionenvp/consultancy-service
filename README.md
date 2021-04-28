@@ -6,7 +6,6 @@
 - Manage Accounts
 - Manage Appointments
 - Save Changes
-![image](https://user-images.githubusercontent.com/36232533/116466959-70aaa580-a86f-11eb-875e-54d20e911ff4.png)
-
+![image](https://user-images.githubusercontent.com/36232533/116467657-37bf0080-a870-11eb-92c6-4df3fc27b7c9.png)
 
 

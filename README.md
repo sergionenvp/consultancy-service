@@ -1,6 +1,6 @@
 # Consultancy Service Application
 
-## System Requirements :smile:
+## Client Side Application :smile:
 ### Super Menu
 - Manage Consultants
 - Manage Accounts

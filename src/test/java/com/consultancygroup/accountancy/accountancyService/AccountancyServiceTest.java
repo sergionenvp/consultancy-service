@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +35,7 @@ public class AccountancyServiceTest {
     AccountancyService accountancyService;
 
     @Test
-    public void testSavePayment(){
+    public void testSaveValidPayment(){
         Payment paymentToBeSaved = new Payment(1L,"Sergio", "12212", null, "334", 3);
         Payment expectedSavedPayment = new Payment(1L, "Sergio", "12212", null, "334", 3);
 
@@ -44,6 +47,36 @@ public class AccountancyServiceTest {
         assertThat(savedPayment).isEqualToComparingFieldByField(expectedSavedPayment);
 
     }
+
+    @Test
+    public void testGetPaymentById(){
+        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", 3);
+
+        Payment servicePayment = new Payment(1L,"Sergio", "12212", null, "334", 3);
+        when(accountancyService.getPaymentById(any(Long.class))).thenReturn(servicePayment);
+
+        Payment gottenPayment = accountancyService.getPaymentById(1L);
+
+        assertThat(gottenPayment).isEqualToComparingFieldByField(payment);
+    }
+
+    @Test
+    public void testGetAllPayments(){
+        Payment payment1 = new Payment(1L,"Sergio", "12212", null, "334", 3);
+        Payment payment2 = new Payment(1L,"Ana", "3456456", null, "334", 3);
+        Payment payment3 = new Payment(1L,"Sara", "3456", null, "334", 3);
+        List<Payment> payments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
+
+        List<Payment> servicePayments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
+
+        when(accountancyService.getAllPayments()).thenReturn(servicePayments);
+
+        List<Payment> returnedPayments = accountancyService.getAllPayments();
+
+        for(int i = 0; i < returnedPayments.size(); i++)
+            assertThat(payments.get(i)).isEqualToComparingFieldByField(returnedPayments.get(i));
+    }
+
 
 
 

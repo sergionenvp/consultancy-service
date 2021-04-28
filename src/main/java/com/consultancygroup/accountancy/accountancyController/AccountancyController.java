@@ -3,6 +3,7 @@ package com.consultancygroup.accountancy.accountancyController;
 
 import com.consultancygroup.accountancy.accountancyService.AccountancyService;
 import com.consultancygroup.accountancy.model.Payment;
+import com.consultancygroup.exceptions.PaymentIdNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,14 +32,14 @@ public class AccountancyController {
         return createdPayment;
     }
 
-    @DeleteMapping("/payment/{id}")
+    @DeleteMapping("/payments/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     void deletePaymentById(@PathVariable Long id){
         accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
         accountancyService.deletePaymentById(id);
     }
 
-    @GetMapping("payments/all")
+    @GetMapping("/payments/all")
     @ResponseStatus(HttpStatus.OK)
     List<Payment> getAllPayments(){
         //accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
@@ -47,13 +48,15 @@ public class AccountancyController {
         return accountancyService.getAllPayments();
     }
 
-    @GetMapping("payments/{id}")
+    @GetMapping("/payments/{id}")
     @ResponseStatus(HttpStatus.OK)
     Payment getPaymentById(@PathVariable("id") Long id){
         //accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
         //accountancyService.savePayment(new Payment(2L,"Sergio", "12212", null, "334", 0));
         //accountancyService.savePayment(new Payment(3L,"Ana", "12212", null, "334", 0));
         Payment payment = accountancyService.getPaymentById(id);
+        if(payment == null)
+            throw new PaymentIdNotFoundException(id);
         return payment;
     }
 

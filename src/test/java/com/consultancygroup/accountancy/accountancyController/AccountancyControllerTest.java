@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -54,6 +55,8 @@ public class AccountancyControllerTest {
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         JSONAssert.assertEquals(expectedReponseBody, responseEntity.getBody(), true);
+
+        verify(accountancyMockService, times(1)).savePayment(any(Payment.class));
     }
 
     @Test
@@ -65,6 +68,13 @@ public class AccountancyControllerTest {
 
         ResponseEntity<String> responseEntity = testRestTemplate.postForEntity(endpoint, payment, String.class);
 
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void testGetInvalidPayment(){
+        String endpoint = "/payments/2";
+        ResponseEntity<String> responseEntity = testRestTemplate.getForEntity(endpoint, String.class);
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
@@ -83,6 +93,8 @@ public class AccountancyControllerTest {
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         JSONAssert.assertEquals(expectedJSONBody, responseEntity.getBody(), true);
+
+        verify(accountancyMockService, times(1)).savePayment(any(Payment.class));
     }
 
     @Test
@@ -99,6 +111,8 @@ public class AccountancyControllerTest {
 
         assertEquals(HttpStatus.OK, responsePayment.getStatusCode());
         JSONAssert.assertEquals(expectedJSONResponseBody, responsePayment.getBody(), true);
+
+        verify(accountancyMockService, times(1)).getPaymentById(any(Long.class));
     }
 
     @Test
@@ -117,6 +131,8 @@ public class AccountancyControllerTest {
 
         assertEquals(HttpStatus.OK, responsePayments.getStatusCode());
         JSONAssert.assertEquals(expectedJSONPayments, responsePayments.getBody(), true);
+
+        verify(accountancyMockService, times(1)).getAllPayments();
     }
 
     @Test
@@ -125,15 +141,18 @@ public class AccountancyControllerTest {
 
         HttpEntity<String> httpEntity = new HttpEntity<>(null, new HttpHeaders());
 
-        String endpoint = "/payments/1";
-
-        testRestTemplate.delete(endpoint);
+        String endpoint = "/payments/delete/1";
 
         ResponseEntity<String> response = testRestTemplate.exchange(endpoint, HttpMethod.DELETE, httpEntity, String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         verify(accountancyMockService, times(1)).deletePaymentById(1L);
+    }
+
+    @Test
+    public void testEditValidPayment() {
+
     }
 
 }

@@ -3,18 +3,17 @@ import java.awt.*;
 import java.awt.event.*;
 public class SuperMenu {
     SubMenu subMenu = new SubMenu();
-    boolean saveState = false;
     Icon icon = new ImageIcon("background.png");
     WindowListener exitListener = new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {
-            if(!saveState) {
+
                 JFrame frame = new JFrame();
                 JPanel panel = new JPanel();
                 panel.setBackground(Color.yellow);
                 JLabel label = new JLabel();
                 label.setFont(new Font("Helvetica",Font.BOLD,20));
-                label.setText("Changes are not saved. Are you sure you want to exit ?");
+                label.setText("Are you sure you want to exit ?");
                 JButton yes = new JButton();
                 yes.setBackground(Color.green);
                 yes.setFont(new Font("Helvetica",Font.BOLD,20));
@@ -43,24 +42,12 @@ public class SuperMenu {
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
                 frame.setResizable(false);
-                frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.setTitle("Changes not saved");
 
-
-
-
-
-            }else System.exit(0);
         }
     };
-
     public void Menu(){
-
-
-
-
-
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
 
@@ -94,7 +81,6 @@ public class SuperMenu {
         frame.getContentPane().add(panel);
         frame.pack();
         frame.setVisible(true);
-
         frame.setSize(450, 300);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -102,7 +88,4 @@ public class SuperMenu {
         frame.addWindowListener(exitListener);
         frame.setTitle("Consultancy Service Application Ⓒ");
     }
-
-
-
 }

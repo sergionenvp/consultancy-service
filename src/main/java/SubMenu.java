@@ -1,11 +1,15 @@
+import HttpMethods.ConsultantCrud;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 public class SubMenu {
 
     public void ConsultantSubMenu(){
-        ConsultantMenu consultantMenu = new ConsultantMenu();
+        ConsultantSubSubMenus consultantMenu = new ConsultantSubSubMenus();
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
@@ -23,7 +27,11 @@ public class SubMenu {
         addConsultantsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                consultantMenu.ConsultantMenu();
+                try {
+                    consultantMenu.AddConsultantMenu();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
         });
         JButton deleteConsultantButton = new JButton();
@@ -31,6 +39,12 @@ public class SubMenu {
 
         deleteConsultantButton.setFont(new Font("Helvetica",Font.BOLD,20));
         deleteConsultantButton.setText("Delete a Consultant");
+        deleteConsultantButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                consultantMenu.DeleteConsultantMenu();
+            }
+        });
         JButton updateConsultantButton = new JButton();
         updateConsultantButton.setBackground(Color.WHITE);
         updateConsultantButton.setFont(new Font("Helvetica",Font.BOLD,20));
@@ -38,7 +52,13 @@ public class SubMenu {
         JButton listConsultantButton = new JButton();
         listConsultantButton.setBackground(Color.WHITE);
         listConsultantButton.setFont(new Font("Helvetica",Font.BOLD,20));
-        listConsultantButton.setText("List Consultants");
+        listConsultantButton.setText("Find Consultants");
+        listConsultantButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               consultantMenu.findConsultantMenu();
+            }
+        });
         panel.add(addConsultantsButton);
         panel.add(deleteConsultantButton);
         panel.add(listConsultantButton);
@@ -48,7 +68,6 @@ public class SubMenu {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
-        SuperMenu superMenu = new SuperMenu();
-        superMenu.Menu();
+
     }
 }

@@ -19,7 +19,6 @@ import java.util.List;
 public class ConsultantController {
     @Autowired
     private ConsultantService consultantService;
-
     //tested
     //
     @PostMapping("/consultant")
@@ -52,7 +51,6 @@ public class ConsultantController {
         }
         return  consultants;
     }
-
     @GetMapping("/consultant")
     public List<Consultant> getAllConsultants(){
         return  consultantService.findAll();
@@ -74,7 +72,6 @@ public class ConsultantController {
             throw new ConsultantOlderThanSomeMinAgeNotFoundException(age);
         }
         return  consultants;
-
     }
     @GetMapping("/consultant/export")
     public void write(){
@@ -82,9 +79,6 @@ public class ConsultantController {
         Serialisation serialisation = new Serialisation();
         serialisation.export(consultants);
     }
-
-
-
     @PutMapping("/consultant/id/{id}")
     public Consultant updateConsultant(@Valid @RequestBody Consultant consultant,@PathVariable("id") Long consultantId) {
         Consultant existentConsultant = consultantService.findConsultantById(consultantId);
@@ -97,5 +91,4 @@ public class ConsultantController {
         }
         return consultant;
     }
-
 }

@@ -172,12 +172,7 @@ public class ConsultantSubSubMenus {
         panel.add(findConsultantByConsultantId);
         panel.add(findConsultantByConsultantName);
         panel.add(findConsultantByConsultantResume);
-        panel.add(findAllConsultants);ThanMinAge(@PathVariable("age") int age) {
-        return  consultantService.getConsultantsOlderThanMinAge(age);
-    }
-    @GetMapping("/consultant/export")
-    public void write(){
-        List<Consultant> consultants = con
+        panel.add(findAllConsultants);
         frame.add(panel);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);

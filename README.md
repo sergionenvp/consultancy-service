@@ -9,7 +9,10 @@
 	1. client-app (a Java Swing Application that connects with these microservices using Apache Http Client Technology)
 	
 - Run client-app along all micro-services at once on linux by the following command (make sure that you are in project directory)
-```
+``` bash
 bash runLinux.sh
 ```
-- On windows run runWindows.bat
+- On windows run
+```
+runWindows.bat
+```

@@ -2,6 +2,7 @@ package com.consultancygroup.consultant.ConsultantController;
 import com.consultancygroup.consultant.ConsultantService.ConsultantService;
 import com.consultancygroup.consultant.Exceptions.ConsultantIdNotFoundException;
 import com.consultancygroup.consultant.Exceptions.ConsultantNameNotFoundException;
+import com.consultancygroup.consultant.Exceptions.ConsultantOlderThanSomeMinAgeNotFoundException;
 import com.consultancygroup.consultant.Exceptions.ConsultantResumeNotFoundException;
 import com.consultancygroup.consultant.Model.Consultant;
 import com.consultancygroup.consultant.Model.ConsultantResume;
@@ -68,13 +69,33 @@ public class ConsultantController {
     //tested with constraints
     @GetMapping("/consultant/ageMinimum/{age}")
     public List<Consultant> getConsultantsOlderThanMinAge(@PathVariable("age") int age) {
-        return  consultantService.getConsultantsOlderThanMinAge(age);
+        List<Consultant> consultants = consultantService.getConsultantsOlderThanMinAge(age);
+        if(consultants.size()==0){
+            throw new ConsultantOlderThanSomeMinAgeNotFoundException(age);
+        }
+        return  consultants;
+
     }
     @GetMapping("/consultant/export")
     public void write(){
         List<Consultant> consultants = consultantService.findAll();
         Serialisation serialisation = new Serialisation();
         serialisation.export(consultants);
+    }
+
+
+
+    @PutMapping("/consultant/id/{id}")
+    public Consultant updateConsultant(@Valid @RequestBody Consultant consultant,@PathVariable("id") Long consultantId) {
+        Consultant existentConsultant = consultantService.findConsultantById(consultantId);
+        if (existentConsultant == null) {
+            throw new ConsultantIdNotFoundException(consultantId);
+        }
+        {
+            consultant.setConsultantId(consultantId);
+            consultantService.saveConsultant(consultant);
+        }
+        return consultant;
     }
 
 }

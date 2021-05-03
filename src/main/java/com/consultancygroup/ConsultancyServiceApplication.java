@@ -34,11 +34,6 @@ public class ConsultancyServiceApplication {
 			// save a few customers
 			Serialisation serialisation = new Serialisation();
 			List<Consultant> consultants = serialisation.importConsultant();
-
-
-
-
-
 			consultantRepository.saveAll(consultants);
 
 		};

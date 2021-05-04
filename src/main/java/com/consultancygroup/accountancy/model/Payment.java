@@ -38,22 +38,5 @@ public class Payment {
         this.price = price;
         this.workerId = workerId;
         this.resume = resume;
-        pay();
-    }
-
-    public void pay(){
-
-        if(getResume().equals(ConsultantResume.JUNIOR)) {
-            commissionCompany = 0.15*getPrice();
-            workerMoney = getPrice() - commissionCompany;
-
-        } else if (getResume().equals(ConsultantResume.EXECUTIVE)) {
-            commissionCompany = 0.10*getPrice();
-            workerMoney = getPrice() - commissionCompany;
-
-        } else if (getResume().equals(ConsultantResume.SENIOR)) {
-            commissionCompany = 0.05*getPrice();
-            workerMoney = getPrice() - commissionCompany;
-        }
     }
 }

@@ -2,6 +2,7 @@ package com.consultancygroup.accountancy.accountancyService;
 
 
 import com.consultancygroup.accountancy.accountancyRepository.AccountancyRepository;
+import com.consultancygroup.accountancy.model.ConsultantResume;
 import com.consultancygroup.accountancy.model.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,20 @@ public class AccountancyServiceImpl implements AccountancyService {
     @Override
     public Payment savePayment(Payment payment) {
         accountancyRepository.save(payment);
+
+        if(payment.getResume().equals(ConsultantResume.JUNIOR)) {
+            payment.setCommissionCompany(0.15*payment.getPrice());
+            payment.setWorkerMoney(payment.getPrice() - payment.getCommissionCompany());
+
+        } else if (payment.getResume().equals(ConsultantResume.EXECUTIVE)) {
+            payment.setCommissionCompany(0.10*payment.getPrice());
+            payment.setWorkerMoney(payment.getPrice() - payment.getCommissionCompany());
+
+        } else if (payment.getResume().equals(ConsultantResume.SENIOR)) {
+            payment.setCommissionCompany(0.05*payment.getPrice());
+            payment.setWorkerMoney(payment.getPrice() - payment.getCommissionCompany());
+        }
+
         return payment;
     }
 

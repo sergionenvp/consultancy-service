@@ -117,7 +117,6 @@ public class AccountancyServiceTest {
     public void testPayJuniorWorker(){
         Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
 
-
         double profit = payment1.getWorkerMoney();
 
         double d = 2;

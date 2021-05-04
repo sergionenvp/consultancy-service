@@ -3,7 +3,6 @@ package com.consultancygroup.accountancy.accountancyService;
 import com.consultancygroup.accountancy.accountancyRepository.AccountancyRepository;
 import com.consultancygroup.accountancy.model.ConsultantResume;
 import com.consultancygroup.accountancy.model.Payment;
-import com.consultancygroup.accountancy.model.Worker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.jdbc.Work;
 import org.junit.jupiter.api.AfterEach;
@@ -39,24 +38,12 @@ public class AccountancyServiceTest {
     @Autowired
     AccountancyService accountancyService;
 
-    private Worker worker1;
-    private Worker worker2;
-    private Worker worker3;
-
-    @BeforeEach
-    private void setUp() {
-        worker1 = new Worker(1L,3, ConsultantResume.EXECUTIVE);
-        worker2 = new Worker(2L,0, ConsultantResume.EXECUTIVE);
-        worker3 = new Worker(3L,0, ConsultantResume.EXECUTIVE);
-    }
-
-
     @Test
     public void testSaveValidPayment() {
-        Payment paymentToBeSaved = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 3);
-        Payment expectedSavedPayment = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(),3);
+        Payment paymentToBeSaved = new Payment(1L,"Sergio", "12212", null, "334", 1L, ConsultantResume.JUNIOR,  3);
+        Payment expectedSavedPayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.JUNIOR, 3);
 
-        Payment paymentService = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(), 3);
+        Payment paymentService = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.JUNIOR, 3);
         when(accountancyService.savePayment(any(Payment.class))).thenReturn(paymentService);
 
         Payment savedPayment = accountancyService.savePayment(paymentToBeSaved);
@@ -78,9 +65,10 @@ public class AccountancyServiceTest {
 
     @Test
     public void testGetAllPayments() {
-        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(),3);
-        Payment payment2 = new Payment(2L, "Ana", "3456456", null, "334", worker2.getId(), 3);
-        Payment payment3 = new Payment(3L, "Sara", "3456", null, "334", worker3.getId(),3);
+        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
+        Payment payment2 = new Payment(2L, "Ana", "3456456", null, "334", 2L, ConsultantResume.EXECUTIVE, 3);
+        Payment payment3 = new Payment(3L, "Sara", "3456", null, "334", 3L, ConsultantResume.EXECUTIVE, 3);
+
         List<Payment> payments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
 
         List<Payment> servicePayments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
@@ -94,9 +82,9 @@ public class AccountancyServiceTest {
 
     @Test
     public void testGetAllPaymentsById() {
-        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(),3);
-        Payment payment2 = new Payment(2L, "Ana", "3456456", null, "334", worker2.getId(), 3);
-        Payment payment3 = new Payment(3L, "Sara", "3456", null, "334", worker3.getId(),3);
+        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
+        Payment payment2 = new Payment(2L, "Ana", "3456456", null, "334", 2L, ConsultantResume.EXECUTIVE, 3);
+        Payment payment3 = new Payment(3L, "Sara", "3456", null, "334", 3L, ConsultantResume.EXECUTIVE, 3);
         List<Payment> payments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
 
         List<Long> ids = new ArrayList<Long>();

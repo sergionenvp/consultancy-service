@@ -3,7 +3,6 @@ package com.consultancygroup.accountancy.accountancyController;
 import com.consultancygroup.accountancy.accountancyService.AccountancyService;
 import com.consultancygroup.accountancy.model.ConsultantResume;
 import com.consultancygroup.accountancy.model.Payment;
-import com.consultancygroup.accountancy.model.Worker;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
@@ -43,27 +42,17 @@ public class AccountancyControllerTest {
     @Autowired
     private ModelMapper modelMapper;
 
-    private Worker worker1;
-    private Worker worker2;
-    private Worker worker3;
-
-    @BeforeEach
-    private void setUp() {
-        worker1 = new Worker(1L,0, ConsultantResume.EXECUTIVE);
-        worker2 = new Worker(2L,0, ConsultantResume.EXECUTIVE);
-        worker3 = new Worker(3L,0, ConsultantResume.EXECUTIVE);
-    }
 
     @Test
     public void testCreateValidPayment() throws JsonProcessingException, JSONException {
-        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(),2);
-        Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(),2);
+        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L,ConsultantResume.EXECUTIVE, 2);
+        Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE, 2);
 
         String endpoint = "/payments";
         String expectedResponseBody = om.writeValueAsString(expectedPayment);
 
         //Service layer expected Payment
-        Payment servicePayment = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(),2);
+        Payment servicePayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
         when(accountancyMockService.savePayment(any(Payment.class))).thenReturn(servicePayment);
 
         //Controller layer getting the created and saved Payment.
@@ -77,8 +66,8 @@ public class AccountancyControllerTest {
 
     @Test
     public void testCreatePaymentWithNegativePrice() throws JsonProcessingException, JSONException {
-        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(), -3);
-        Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(), -3);
+        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,-3);
+        Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,-3);
 
         String endpoint = "/payments";
 
@@ -96,13 +85,13 @@ public class AccountancyControllerTest {
 
     @Test
     public void testCreatePaymentWithPriceEqualsTo0() throws JsonProcessingException, JSONException {
-        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
-        Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334",  worker1.getId(),0);
+        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
+        Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
 
         String endpoint = "/payments";
         String expectedJSONBody = om.writeValueAsString(expectedPayment);
 
-        Payment servicePayment = new Payment(1L, "Sergio", "12212", null, "334", worker1.getId(), 0);
+        Payment servicePayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
         when(accountancyMockService.savePayment(any(Payment.class))).thenReturn(servicePayment);
 
         ResponseEntity<String> responseEntity = testRestTemplate.postForEntity(endpoint, payment, String.class);
@@ -115,12 +104,12 @@ public class AccountancyControllerTest {
 
     @Test
     public void testGetPaymentByIdValidId() throws JsonProcessingException, JSONException {
-        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
+        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
 
         String expectedJSONResponseBody = om.writeValueAsString(payment);
         String endpoint = "/payments/" + payment.getId();
 
-        Payment servicePayment = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
+        Payment servicePayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
         when(accountancyMockService.getPaymentById(any(Long.class))).thenReturn(servicePayment);
 
         ResponseEntity<String> responsePayment = testRestTemplate.getForEntity(endpoint, String.class);
@@ -133,9 +122,9 @@ public class AccountancyControllerTest {
 
     @Test
     public void testGetAllPaymentsValidPayments() throws JsonProcessingException, JSONException {
-        Payment payment1 = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
-        Payment payment2 = new Payment(2L,"Sara", "8899", null, "334", worker2.getId(),20);
-        Payment payment3 = new Payment(3L,"Ana", "12332322", null, "334", worker3.getId(), 10);
+        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
+        Payment payment2 = new Payment(2L, "Sara", "2345425", null, "334", 2L, ConsultantResume.EXECUTIVE,2);
+        Payment payment3 = new Payment(3L, "Ivan", "12212", null, "334", 3L, ConsultantResume.JUNIOR,20);
         List<Payment> payments = new ArrayList<Payment>(){ {add(payment1); add(payment2); add(payment3);} };
         String expectedJSONPayments = om.writeValueAsString(payments);
 
@@ -153,9 +142,9 @@ public class AccountancyControllerTest {
 
     @Test
     public void testGetAllPaymentsById() throws JsonProcessingException, JSONException {
-        Payment payment1 = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
-        Payment payment2 = new Payment(2L,"Sara", "8899", null, "334", worker2.getId(),20);
-        Payment payment3 = new Payment(3L,"Ana", "12332322", null, "334", worker3.getId(), 10);
+        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
+        Payment payment2 = new Payment(2L, "Sara", "2345425", null, "334", 2L, ConsultantResume.EXECUTIVE,2);
+        Payment payment3 = new Payment(3L, "Ana", "2345425", null, "334", 3L, ConsultantResume.JUNIOR,2);
         List<Payment> payments = new ArrayList<Payment>(){ {add(payment1); add(payment3);} };
         String expectedJSONPayments = om.writeValueAsString(payments);
 
@@ -177,11 +166,11 @@ public class AccountancyControllerTest {
 
     @Test
     public void testEditValidPayment() throws JsonProcessingException, JSONException {
-        Payment previousPayment = new Payment(1L,"AnaMaria", "8899", null, "168", worker1.getId(),41);
+        Payment previousPayment = new Payment(1L,"AnaMaria", "8899", null, "168", 1L, ConsultantResume.JUNIOR,41);
         when(accountancyMockService.getPaymentById(1L)).thenReturn(previousPayment);
 
-        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
-        Payment expectedPayment = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
+        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", 2L, ConsultantResume.SENIOR, 0);
+        Payment expectedPayment = new Payment(1L,"Sergio", "12212", null, "334", 2L, ConsultantResume.SENIOR, 0);
         when(accountancyMockService.savePayment(any(Payment.class))).thenReturn(expectedPayment);
 
         HttpHeaders headers = new HttpHeaders();
@@ -217,8 +206,8 @@ public class AccountancyControllerTest {
 
     @Test
     public void testExport() throws JsonProcessingException {
-        Payment payment1 = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 0);
-        Payment payment2 = new Payment(2L,"Laura", "12212", null, "334", worker2.getId(), 0);
+        Payment payment1 = new Payment(1L,"Sergio", "12212", null, "334", 2L, ConsultantResume.SENIOR, 0);
+        Payment payment2 = new Payment(2L,"Laura", "12212", null, "334", 2L, ConsultantResume.SENIOR, 0);
         List<Payment> expectedConsultants = new LinkedList<Payment>();
         expectedConsultants.add(payment1);
         expectedConsultants.add(payment2);

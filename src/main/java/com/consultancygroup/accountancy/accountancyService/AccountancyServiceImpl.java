@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
-public class AccountancyServiceImpl implements AccountancyService{
+public class AccountancyServiceImpl implements AccountancyService {
 
     @Autowired
     private AccountancyRepository accountancyRepository;
@@ -24,9 +23,7 @@ public class AccountancyServiceImpl implements AccountancyService{
     }
 
     @Override
-    public Payment getPaymentById(Long id) {
-        return accountancyRepository.getOne(id);
-    }
+    public Payment getPaymentById(Long id) { return accountancyRepository.findById(id).get(); }
 
     @Override
     public List<Payment> getAllPayments() {
@@ -37,4 +34,10 @@ public class AccountancyServiceImpl implements AccountancyService{
     public void deletePaymentById(Long id) {
         accountancyRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteAllPayments() { accountancyRepository.deleteAll(); }
+
+    @Override
+    public List<Payment> getAllPaymentsById(List<Long> ids) { return accountancyRepository.findAllById(ids); }
 }

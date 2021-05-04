@@ -3,7 +3,8 @@ package com.consultancygroup.accountancy.accountancyController;
 
 import com.consultancygroup.accountancy.accountancyService.AccountancyService;
 import com.consultancygroup.accountancy.model.Payment;
-import com.consultancygroup.exceptions.PaymentIdNotFoundException;
+import com.consultancygroup.accountancy.exceptions.PaymentIdNotFoundException;
+import com.consultancygroup.accountancy.serialization.Serialization;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Transactional
@@ -26,7 +26,7 @@ public class AccountancyController {
 
     @PostMapping("/payments")
     @ResponseStatus(HttpStatus.CREATED)
-    Payment newPayment(@Valid @RequestBody Payment paymentRequest){
+    Payment newPayment(@Valid @RequestBody Payment paymentRequest) {
         Payment createdPayment = modelMapper.map(paymentRequest, Payment.class);
         createdPayment = accountancyService.savePayment(createdPayment);
         return createdPayment;
@@ -34,36 +34,54 @@ public class AccountancyController {
 
     @DeleteMapping("/payments/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deletePaymentById(@PathVariable Long id){
-        accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
+    void deletePaymentById(@PathVariable Long id) {
         accountancyService.deletePaymentById(id);
     }
 
     @GetMapping("/payments/all")
     @ResponseStatus(HttpStatus.OK)
-    List<Payment> getAllPayments(){
-        //accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
-        //accountancyService.savePayment(new Payment(2L,"Sara", "12212", null, "334", 0));
-        //accountancyService.savePayment(new Payment(3L,"Ana", "w43634", null, "334", 0));
+    List<Payment> getAllPayments() {
         return accountancyService.getAllPayments();
+    }
+
+    @GetMapping("/payments/all/{ids}")
+    @ResponseStatus(HttpStatus.OK)
+    List<Payment> getAllPaymentsById(@PathVariable("ids") List<Long> ids) {
+        return accountancyService.getAllPaymentsById(ids);
     }
 
     @GetMapping("/payments/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Payment getPaymentById(@PathVariable("id") Long id){
-        //accountancyService.savePayment(new Payment(1L,"Sergio", "12212", null, "334", 0));
-        //accountancyService.savePayment(new Payment(2L,"Sergio", "12212", null, "334", 0));
-        //accountancyService.savePayment(new Payment(3L,"Ana", "12212", null, "334", 0));
+    Payment getPaymentById(@PathVariable("id") Long id) {
         Payment payment = accountancyService.getPaymentById(id);
-        if(payment == null)
+        if (payment == null)
             throw new PaymentIdNotFoundException(id);
         return payment;
     }
 
-
-    Payment changePayment(Payment payment){
-        return null;
+    @PutMapping("/payments/update/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    Payment changePayment(@Valid @RequestBody Payment payment, @PathVariable("id") Long id) {
+        Payment actualPayment = accountancyService.getPaymentById(id);
+        if(actualPayment == null)
+            throw new PaymentIdNotFoundException(id);
+        else{
+            payment.setId(id);
+            accountancyService.savePayment(payment);
+            return payment;
+        }
     }
 
+    @DeleteMapping("/payments/delete/all")
+    void deleteAllPayments(){
+        accountancyService.deleteAllPayments();
+    }
+
+    @GetMapping("/payments/export")
+    public void write(){
+        List<Payment> payments = accountancyService.getAllPayments();
+        Serialization serialization = new Serialization();
+        serialization.export(payments, "payments");
+    }
 
 }

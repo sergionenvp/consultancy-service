@@ -7,12 +7,16 @@ import java.util.List;
 
 public interface AccountancyService {
 
-    Payment savePayment(Payment payment);
+    public Payment savePayment(Payment payment);
 
-    Payment getPaymentById(Long id);
+    public Payment getPaymentById(Long id);
 
-    List<Payment> getAllPayments();
+    public List<Payment> getAllPayments();
 
-    void deletePaymentById(Long l);
+    public void deletePaymentById(Long l);
+
+    public void deleteAllPayments();
+
+    public List<Payment> getAllPaymentsById(List<Long> ids);
 
 }

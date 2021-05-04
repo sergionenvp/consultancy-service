@@ -1,4 +1,4 @@
-package com.consultancygroup.exceptions;
+package com.consultancygroup.accountancy.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

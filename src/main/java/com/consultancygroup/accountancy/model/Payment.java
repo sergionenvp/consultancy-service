@@ -11,7 +11,6 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Payment {
 
     @Id
@@ -39,6 +38,7 @@ public class Payment {
         this.price = price;
         this.workerId = workerId;
         this.resume = resume;
+        pay();
     }
 
     public void pay(){

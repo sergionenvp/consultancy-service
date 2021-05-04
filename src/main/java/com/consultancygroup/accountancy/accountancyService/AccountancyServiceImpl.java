@@ -40,4 +40,10 @@ public class AccountancyServiceImpl implements AccountancyService {
 
     @Override
     public List<Payment> getAllPaymentsById(List<Long> ids) { return accountancyRepository.findAllById(ids); }
+
+    @Override
+    public double getWorkerProfitByPaymentId(Long l) {
+        Payment payment = accountancyRepository.findById(l).get();
+        return payment.getWorkerMoney();
+    }
 }

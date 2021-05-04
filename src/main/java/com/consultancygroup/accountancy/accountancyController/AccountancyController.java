@@ -46,9 +46,7 @@ public class AccountancyController {
 
     @GetMapping("/payments/all/{ids}")
     @ResponseStatus(HttpStatus.OK)
-    List<Payment> getAllPaymentsById(@PathVariable("ids") List<Long> ids) {
-        return accountancyService.getAllPaymentsById(ids);
-    }
+    List<Payment> getAllPaymentsById(@PathVariable("ids") List<Long> ids) { return accountancyService.getAllPaymentsById(ids); }
 
     @GetMapping("/payments/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -59,17 +57,10 @@ public class AccountancyController {
         return payment;
     }
 
-    @PutMapping("/payments/update/{id}")
+    @GetMapping("/payments/worker/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Payment changePayment(@Valid @RequestBody Payment payment, @PathVariable("id") Long id) {
-        Payment actualPayment = accountancyService.getPaymentById(id);
-        if(actualPayment == null)
-            throw new PaymentIdNotFoundException(id);
-        else{
-            payment.setId(id);
-            accountancyService.savePayment(payment);
-            return payment;
-        }
+    double getWorkerProfit(@PathVariable("id") Long id) {
+        return accountancyService.getWorkerProfitByPaymentId(id);
     }
 
     @DeleteMapping("/payments/delete/all")

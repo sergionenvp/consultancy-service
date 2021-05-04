@@ -65,6 +65,27 @@ public class AccountancyControllerTest {
     }
 
     @Test
+    public void testGetWorkerMoney() throws JsonProcessingException, JSONException {
+        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L,ConsultantResume.EXECUTIVE, 2);
+        double expectedProfit = 2.7;
+
+        String endpoint = "/payments/worker/1";
+        String expectedResponseBody = om.writeValueAsString(expectedProfit);
+
+        //Service layer expected double
+        double d = 2.7;
+        when(accountancyMockService.getWorkerProfitByPaymentId(any(Long.class))).thenReturn(d);
+
+        //Controller layer getting the created and saved Payment.
+        ResponseEntity<String> responseEntity = testRestTemplate.getForEntity(endpoint, String.class);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        JSONAssert.assertEquals(expectedResponseBody, responseEntity.getBody(), true);
+
+        verify(accountancyMockService, times(1)).getWorkerProfitByPaymentId(any(Long.class));
+    }
+
+    @Test
     public void testCreatePaymentWithNegativePrice() throws JsonProcessingException, JSONException {
         Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,-3);
         Payment expectedPayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,-3);
@@ -230,5 +251,7 @@ public class AccountancyControllerTest {
 
         verify(accountancyMockService, times(1)).deleteAllPayments();
     }
+
+
 
 }

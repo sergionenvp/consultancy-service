@@ -100,17 +100,32 @@ public class AccountancyServiceTest {
     }
 
     @Test
-    void testDeleteConsultantByValidId() {
+    public void testDeleteConsultantByValidId() {
         accountancyService.deletePaymentById(1L);
 
         verify(accountancyRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void testDeleteAll() {
+    public void testDeleteAll() {
         accountancyService.deleteAllPayments();
 
         verify(accountancyRepository, times(1)).deleteAll();
+    }
+
+    @Test
+    public void testPayJuniorWorker(){
+        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
+
+
+        double profit = payment1.getWorkerMoney();
+
+        double d = 2;
+        when(accountancyService.getWorkerProfitByPaymentId(any(Long.class))).thenReturn(d);
+
+        double returnedMoney = accountancyService.getWorkerProfitByPaymentId(1L);
+
+        assertEquals(profit, returnedMoney);
     }
 
 

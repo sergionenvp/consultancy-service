@@ -19,4 +19,5 @@ public interface AccountancyService {
 
     public List<Payment> getAllPaymentsById(List<Long> ids);
 
+    public double getWorkerProfitByPaymentId(Long l);
 }

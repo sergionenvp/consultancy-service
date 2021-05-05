@@ -59,10 +59,22 @@ public class AccountancyController {
         return payment;
     }
 
-    @GetMapping("/payments/worker/{id}")
+    @GetMapping("/payments/payment/workerId/{id}")
     @ResponseStatus(HttpStatus.OK)
-    double getWorkerProfit(@PathVariable("id") Long id) {
+    Payment getPaymentByWorkerId(@PathVariable("id") Long id) {
+        return accountancyService.getPaymentByWorkerId(id);
+    }
+
+    @GetMapping("/payments/salary/payment/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    double getWorkerProfitByPaymentId(@PathVariable("id") Long id) {
         return accountancyService.getWorkerProfitByPaymentId(id);
+    }
+
+    @GetMapping("/payments/salary/worker/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    double getWorkerProfitByWorkerId(@PathVariable("id") Long id) {
+        return accountancyService.getWorkerProfitByWorkerId(id);
     }
 
     @PutMapping("/payments/update/{id}")

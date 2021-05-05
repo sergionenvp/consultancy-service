@@ -9,7 +9,7 @@ public interface AccountancyService {
 
     public Payment savePayment(Payment payment);
 
-    public Payment getPaymentById(Long id);
+    public Payment getPaymentById(Long l);
 
     public List<Payment> getAllPayments();
 
@@ -20,4 +20,8 @@ public interface AccountancyService {
     public List<Payment> getAllPaymentsById(List<Long> ids);
 
     public double getWorkerProfitByPaymentId(Long l);
+
+    public double getWorkerProfitByWorkerId(Long l);
+
+    public Payment getPaymentByWorkerId(Long l);
 }

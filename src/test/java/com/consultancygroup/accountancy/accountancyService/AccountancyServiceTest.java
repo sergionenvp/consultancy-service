@@ -38,37 +38,39 @@ public class AccountancyServiceTest {
     @Autowired
     AccountancyService accountancyService;
 
+    private Payment payment1;
+    private Payment payment2;
+    private Payment payment3;
+
+    @BeforeEach
+    public void setUp(){
+        payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
+        payment2 = new Payment(2L, "Ana", "3456456", null, "334", 2L, ConsultantResume.EXECUTIVE, 3);
+        payment3 = new Payment(3L, "Sara", "3456", null, "334", 3L, ConsultantResume.EXECUTIVE, 3);
+    }
+
     @Test
     public void testSaveValidPayment() {
         Payment paymentToBeSaved = new Payment(1L,"Sergio", "12212", null, "334", 1L, ConsultantResume.JUNIOR,  3);
         Payment expectedSavedPayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.JUNIOR, 3);
 
         Payment paymentService = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.JUNIOR, 3);
-        when(accountancyService.savePayment(any(Payment.class))).thenReturn(paymentService);
+        when(accountancyRepository.save(paymentToBeSaved)).thenReturn(paymentService);
 
         Payment savedPayment = accountancyService.savePayment(paymentToBeSaved);
 
-        assertThat(savedPayment).isEqualToComparingFieldByField(expectedSavedPayment);
+        assertThat(savedPayment).isEqualToIgnoringGivenFields(expectedSavedPayment, "workerMoney", "commissionCompany");
     }
 
-   /* @Test
+    @Test
     public void testGetPaymentById() {
-        Payment payment = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 3);
-
-        Payment servicePayment = new Payment(1L,"Sergio", "12212", null, "334", worker1.getId(), 3);
-        when(accountancyRepository.findById(any(Long.class)).get()).thenReturn(servicePayment);
-        //I think this does not work because the load is eager, findById(). With getOne works.
-        Payment gottenPayment = accountancyService.getPaymentById(1L);
-
-        assertThat(gottenPayment).isEqualToComparingFieldByField(payment);
-    }*/
+        when(accountancyRepository.findById(1L)).thenReturn(java.util.Optional.of(payment1));
+        Payment returnedPayment = accountancyService.getPaymentById(1L);
+        assertEquals(payment1, returnedPayment);
+    }
 
     @Test
     public void testGetAllPayments() {
-        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
-        Payment payment2 = new Payment(2L, "Ana", "3456456", null, "334", 2L, ConsultantResume.EXECUTIVE, 3);
-        Payment payment3 = new Payment(3L, "Sara", "3456", null, "334", 3L, ConsultantResume.EXECUTIVE, 3);
-
         List<Payment> payments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
 
         List<Payment> servicePayments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
@@ -82,9 +84,6 @@ public class AccountancyServiceTest {
 
     @Test
     public void testGetAllPaymentsById() {
-        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
-        Payment payment2 = new Payment(2L, "Ana", "3456456", null, "334", 2L, ConsultantResume.EXECUTIVE, 3);
-        Payment payment3 = new Payment(3L, "Sara", "3456", null, "334", 3L, ConsultantResume.EXECUTIVE, 3);
         List<Payment> payments = new ArrayList<Payment>(){{ add(payment1); add(payment2); add(payment3); }};
 
         List<Long> ids = new ArrayList<Long>();
@@ -114,17 +113,36 @@ public class AccountancyServiceTest {
     }
 
     @Test
-    public void testPayJuniorWorker(){
-        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
+    public void testGetWorkerMoneyByPaymentId() {
+        Payment payment = accountancyService.savePayment(payment1);
+        double profit = payment.getWorkerMoney();
 
-        double profit = payment1.getWorkerMoney();
-
-        double d = 2;
-        when(accountancyService.getWorkerProfitByPaymentId(any(Long.class))).thenReturn(d);
+        double d = 2.7;
+        when(accountancyRepository.findProfitByPaymentId(1L)).thenReturn(d);
 
         double returnedMoney = accountancyService.getWorkerProfitByPaymentId(1L);
 
         assertEquals(profit, returnedMoney);
+    }
+
+    @Test
+    public void testGetWorkerMoneyByWorkerId() {
+        Payment payment = accountancyService.savePayment(payment1);
+        double profit = payment.getWorkerMoney();
+
+        double d = 2.7;
+        when(accountancyRepository.findProfitByWorkerId(1L)).thenReturn(d);
+
+        double returnedMoney = accountancyService.getWorkerProfitByWorkerId(1L);
+
+        assertEquals(profit, returnedMoney);
+    }
+
+    @Test
+    public void testGetPaymentByWorkerId() {
+        when(accountancyRepository.findPaymentWorkerId(any(Long.class))).thenReturn(payment1);
+        Payment returnedPayment = accountancyService.getPaymentByWorkerId(1L);
+        assertEquals(payment1, returnedPayment);
     }
 
 

@@ -58,7 +58,18 @@ public class AccountancyServiceImpl implements AccountancyService {
 
     @Override
     public double getWorkerProfitByPaymentId(Long l) {
-        Payment payment = accountancyRepository.findById(l).get();
-        return payment.getWorkerMoney();
+        double profit = accountancyRepository.findProfitByPaymentId(l);
+        return profit;
+    }
+
+    @Override
+    public double getWorkerProfitByWorkerId(Long l) {
+        double profit = accountancyRepository.findProfitByWorkerId(l);
+        return profit;
+    }
+
+    @Override
+    public Payment getPaymentByWorkerId(Long l) {
+        return accountancyRepository.findPaymentWorkerId(l);
     }
 }

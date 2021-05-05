@@ -42,6 +42,16 @@ public class AccountancyControllerTest {
     @Autowired
     private ModelMapper modelMapper;
 
+    private Payment payment1;
+    private Payment payment2;
+    private Payment payment3;
+
+    @BeforeEach
+    public void setUp(){
+        payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,3);
+        payment2 = new Payment(2L, "Ana", "3456456", null, "334", 2L, ConsultantResume.EXECUTIVE, 3);
+        payment3 = new Payment(3L, "Sara", "3456", null, "334", 3L, ConsultantResume.EXECUTIVE, 3);
+    }
 
     @Test
     public void testCreateValidPayment() throws JsonProcessingException, JSONException {
@@ -51,7 +61,7 @@ public class AccountancyControllerTest {
         String endpoint = "/payments";
         String expectedResponseBody = om.writeValueAsString(expectedPayment);
 
-        //Service layer expected Payment
+        //Service layer expected Payment.
         Payment servicePayment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
         when(accountancyMockService.savePayment(any(Payment.class))).thenReturn(servicePayment);
 
@@ -65,14 +75,14 @@ public class AccountancyControllerTest {
     }
 
     @Test
-    public void testGetWorkerMoney() throws JsonProcessingException, JSONException {
+    public void testGetWorkerMoneyByPaymentId() throws JsonProcessingException, JSONException {
         Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L,ConsultantResume.EXECUTIVE, 2);
         double expectedProfit = 2.7;
 
-        String endpoint = "/payments/worker/1";
+        String endpoint = "/payments/salary/payment/" + payment.getId();
         String expectedResponseBody = om.writeValueAsString(expectedProfit);
 
-        //Service layer expected double
+        //Service layer expected double.
         double d = 2.7;
         when(accountancyMockService.getWorkerProfitByPaymentId(any(Long.class))).thenReturn(d);
 
@@ -83,6 +93,27 @@ public class AccountancyControllerTest {
         JSONAssert.assertEquals(expectedResponseBody, responseEntity.getBody(), true);
 
         verify(accountancyMockService, times(1)).getWorkerProfitByPaymentId(any(Long.class));
+    }
+
+    @Test
+    public void testGetWorkerMoneyByWorkerId() throws JsonProcessingException, JSONException {
+        Payment payment = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE, 2);
+        double expectedProfit = 2.7;
+
+        String endpoint = "/payments/salary/worker/" + payment.getWorkerId();
+        String expectedResponseBody = om.writeValueAsString(expectedProfit);
+
+        //Service layer expected double.
+        double d = 2.7;
+        when(accountancyMockService.getWorkerProfitByWorkerId(any(Long.class))).thenReturn(d);
+
+        //Controller layer getting the created and saved Payment.
+        ResponseEntity<String> responseEntity = testRestTemplate.getForEntity(endpoint, String.class);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        JSONAssert.assertEquals(expectedResponseBody, responseEntity.getBody(), true);
+
+        verify(accountancyMockService, times(1)).getWorkerProfitByWorkerId(any(Long.class));
     }
 
     @Test
@@ -143,9 +174,6 @@ public class AccountancyControllerTest {
 
     @Test
     public void testGetAllPaymentsValidPayments() throws JsonProcessingException, JSONException {
-        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
-        Payment payment2 = new Payment(2L, "Sara", "2345425", null, "334", 2L, ConsultantResume.EXECUTIVE,2);
-        Payment payment3 = new Payment(3L, "Ivan", "12212", null, "334", 3L, ConsultantResume.JUNIOR,20);
         List<Payment> payments = new ArrayList<Payment>(){ {add(payment1); add(payment2); add(payment3);} };
         String expectedJSONPayments = om.writeValueAsString(payments);
 
@@ -163,9 +191,6 @@ public class AccountancyControllerTest {
 
     @Test
     public void testGetAllPaymentsById() throws JsonProcessingException, JSONException {
-        Payment payment1 = new Payment(1L, "Sergio", "12212", null, "334", 1L, ConsultantResume.EXECUTIVE,2);
-        Payment payment2 = new Payment(2L, "Sara", "2345425", null, "334", 2L, ConsultantResume.EXECUTIVE,2);
-        Payment payment3 = new Payment(3L, "Ana", "2345425", null, "334", 3L, ConsultantResume.JUNIOR,2);
         List<Payment> payments = new ArrayList<Payment>(){ {add(payment1); add(payment3);} };
         String expectedJSONPayments = om.writeValueAsString(payments);
 
@@ -227,8 +252,6 @@ public class AccountancyControllerTest {
 
     @Test
     public void testExport() throws JsonProcessingException {
-        Payment payment1 = new Payment(1L,"Sergio", "12212", null, "334", 2L, ConsultantResume.SENIOR, 0);
-        Payment payment2 = new Payment(2L,"Laura", "12212", null, "334", 2L, ConsultantResume.SENIOR, 0);
         List<Payment> expectedConsultants = new LinkedList<Payment>();
         expectedConsultants.add(payment1);
         expectedConsultants.add(payment2);
@@ -252,6 +275,20 @@ public class AccountancyControllerTest {
         verify(accountancyMockService, times(1)).deleteAllPayments();
     }
 
+    @Test
+    public void testFindWorkerIdByIdInPayments() throws JsonProcessingException, JSONException {
+        String endpoint = "/payments/payment/workerId/" + payment1.getWorkerId();
 
+        String expectedJSON = om.writeValueAsString(payment1);
+
+        when(accountancyMockService.getPaymentByWorkerId(any(Long.class))).thenReturn(payment1);
+
+        ResponseEntity<String> response = testRestTemplate.getForEntity(endpoint, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JSONAssert.assertEquals(expectedJSON, response.getBody(), true);
+
+        verify(accountancyMockService, times(1)).getPaymentByWorkerId(1L);
+    }
 
 }

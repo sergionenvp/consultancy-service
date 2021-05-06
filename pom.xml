@@ -4,9 +4,36 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<modules>
+
+
+</project>
+
+
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://ma... http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.consultancy</groupId>
+   <artifactId>root-pom</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   	<modules>
     <module>accountancy-microservice</module>
     <module>consultant-microservice</module>
 </modules>
-
-</project>
+   <properties>
+      <jre.level>1.8</jre.level>
+      <jdk.level>1.8</jdk.level>
+   </properties>
+   <build>
+      <plugins>
+         <!-- Compiler plug-in -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.5.1</version>
+            <configuration>
+               <source>${jdk.level}</source>
+               <target>${jdk.level}</target>
+            </configuration>
+         </plugin>

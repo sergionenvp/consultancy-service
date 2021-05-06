@@ -68,6 +68,12 @@ public class SuperMenu {
 
         manageAccountsAndPaymentsButton.setFont(new Font("Helvetica",Font.BOLD,20));
         manageAccountsAndPaymentsButton.setText("Manage Accounts and Payments");
+        manageAccountsAndPaymentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                subMenu.AccountancySubMenu();
+            }
+        });
         JButton manageAppointmentsButton = new JButton();
         manageAppointmentsButton.setBackground(Color.WHITE);
         manageAppointmentsButton.setFont(new Font("Helvetica",Font.BOLD,20));

@@ -85,9 +85,9 @@ public class ConsultantCrud {
         if(response.getStatusLine().getStatusCode()==200)
         {
             Consultant consultant = om.readValue(EntityUtils.toString(response.getEntity()),Consultant.class);
-            String consultant2String = "Consultant ID:"+consultant.consultantId+", Full Name:"+consultant.fullName+", Age:"
-                    +consultant.age+", Consultant Resume:"+consultant.consultantResume.toString()+", Phone Number:"+
-                    consultant.phoneNumber;
+            String consultant2String = "Consultant ID:"+consultant.getConsultantId()+", Full Name:"+consultant.getFullName()+", Age:"
+                    +consultant.getAge()+", Consultant Resume:"+consultant.getConsultantResume().toString()+", Phone Number:"+
+                    consultant.getPhoneNumber();
             return  consultant2String;
         }
         else if(response.getStatusLine().getStatusCode()==404)
@@ -156,12 +156,12 @@ public class ConsultantCrud {
         CloseableHttpResponse response = httpClient.execute(request);
         // 1. convert JSON array to Array object
         if(response.getStatusLine().getStatusCode()==200)
-            return "Changes saved successfully.";
+            return "Consultant changes saved successfully.";
         else
             return "Error: changes did not all save successfully.";
     }
 
-    public void update(String consultantId, String fullName, String age, String phoneNumber, String consultantResume) throws IOException {
+    public void updateConsultant(String consultantId, String fullName, String age, String phoneNumber, String consultantResume) throws IOException {
         HttpPut put = new HttpPut("http://localhost:9003/consultant/id/"+consultantId);
         put.addHeader("Content-type", "application/json");
         StringBuilder json = new StringBuilder();
@@ -176,7 +176,7 @@ public class ConsultantCrud {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = httpClient.execute(put);
         if(response.getStatusLine().getStatusCode()==200)
-            JOptionPane.showMessageDialog(null, "Consultant with consultant id "+consultantId+" have been updated successfully.","Succefull update",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Consultant with consultant id "+consultantId+" have been updated successfully.","Successfully update",JOptionPane.WARNING_MESSAGE);
         else
         {
             // create a JTextArea
@@ -189,4 +189,5 @@ public class ConsultantCrud {
             JOptionPane.showMessageDialog(null, scrollPane,"Warning",JOptionPane.WARNING_MESSAGE);
         }
     }
+
 }

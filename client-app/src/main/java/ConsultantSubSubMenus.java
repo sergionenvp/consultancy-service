@@ -1,7 +1,5 @@
 import HttpMethods.ConsultantCrud;
 import Models.Consultant;
-import Models.ConsultantResume;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
 public class ConsultantSubSubMenus {
     ConsultantCrud consultantCrud = new ConsultantCrud();
     Verifiers verifiers = new Verifiers();
@@ -40,7 +37,6 @@ public class ConsultantSubSubMenus {
 
     }
     public void DeleteConsultantMenu(){
-        ConsultantSubSubMenus consultantMenu = new ConsultantSubSubMenus();
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
@@ -323,54 +319,53 @@ public void findAllConsultants() throws IOException {
         };
         int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Deleting a consultant.", JOptionPane.OK_CANCEL_OPTION);
         if(option==JOptionPane.OK_OPTION) {
-            consultantCrud.deleteOneConsultant(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[0]);
+            consultantCrud.deleteOneConsultant(getConsultant(consultantArray[consultantBox.getSelectedIndex()])[0]);
         }
 
         }
 
 
     public void updateConsultant() throws IOException {
+
         List<String> consultants = covertConsultantListToStringList(consultantCrud.getAllConsultants());
         String[] consultantArray = new String[consultants.size()];
         consultants.toArray(consultantArray);
 
-        JComboBox consultantBox  = new JComboBox(consultantArray);
+        JComboBox consultantBox = new JComboBox(consultantArray);
         Object[] consultantUpdate = {
-                "Select consultant to update:",consultantBox,
+                "Select consultant to update:", consultantBox,
 
         };
+        if(consultants.size()!=0){
         int option = JOptionPane.showConfirmDialog(null, consultantUpdate, "Updating a consultant.", JOptionPane.OK_CANCEL_OPTION);
-        if(option==JOptionPane.OK_OPTION) {
-            String resume[] = {"JUNIOR","EXECUTIVE","SENIOR"};
-            JTextField fullName = new JTextField(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[1]);
-            JTextField age = new JTextField(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[2]);
-            JTextField phoneNumber = new JTextField(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[4]);
-            JComboBox consultantResume  = new JComboBox(resume);
-            if(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[3].equals("JUNIOR"))
+        if (option == JOptionPane.OK_OPTION) {
+            String resume[] = {"JUNIOR", "EXECUTIVE", "SENIOR"};
+            JTextField fullName = new JTextField(getConsultant(consultantArray[consultantBox.getSelectedIndex()])[1]);
+            JTextField age = new JTextField(getConsultant(consultantArray[consultantBox.getSelectedIndex()])[2]);
+            JTextField phoneNumber = new JTextField(getConsultant(consultantArray[consultantBox.getSelectedIndex()])[4]);
+            JComboBox consultantResume = new JComboBox(resume);
+            if (getConsultant(consultantArray[consultantBox.getSelectedIndex()])[3].equals("JUNIOR"))
                 consultantResume.setSelectedIndex(0);
-            else if(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[3].equals("EXECUTIVE"))
+            else if (getConsultant(consultantArray[consultantBox.getSelectedIndex()])[3].equals("EXECUTIVE"))
                 consultantResume.setSelectedIndex(1);
-            else if(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[3].equals("SENIOR"))
+            else if (getConsultant(consultantArray[consultantBox.getSelectedIndex()])[3].equals("SENIOR"))
                 consultantResume.setSelectedIndex(2);
             Object[] consultantDetails = {
-                    "Full Name:",fullName,
-                    "Age: ",age,
-                    "Phone Number",phoneNumber,
+                    "Full Name:", fullName,
+                    "Age: ", age,
+                    "Phone Number", phoneNumber,
                     "Resume: ", consultantResume
             };
             int option2 = JOptionPane.showConfirmDialog(null, consultantDetails, "Adding a new consultant", JOptionPane.OK_CANCEL_OPTION);
-            if(option2==JOptionPane.OK_OPTION){
-                consultantCrud.update(getConsultantId(consultantArray[consultantBox.getSelectedIndex()])[0],fullName.getText(),age.getText(),phoneNumber.getText(),consultantResume.getSelectedItem().toString());
-
+            if (option2 == JOptionPane.OK_OPTION) {
+                consultantCrud.updateConsultant(getConsultant(consultantArray[consultantBox.getSelectedIndex()])[0], fullName.getText(), age.getText(), phoneNumber.getText(), consultantResume.getSelectedItem().toString());
             }
-
-
         }
-
     }
-
-
-
+        else {
+            JOptionPane.showMessageDialog(null, "No consultants in system.", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
     //method to get consultant id from entity
     /*
     array values
@@ -379,10 +374,8 @@ public void findAllConsultants() throws IOException {
     2-> age
     3-> consultantResume
     4-> phoneNumber
-
-
      */
-    public String[] getConsultantId(String consultant){
+    public String[] getConsultant(String consultant){
         String[] tokens1 = consultant.split(",");
         String[] tokens2 = tokens1[0].split(":");
         String[] consultantData = new String[5];
@@ -398,21 +391,18 @@ public void findAllConsultants() throws IOException {
         return  consultantData;
 
     }
-public List<String> covertConsultantListToStringList(List<Consultant> consultants){
+    public List<String> covertConsultantListToStringList(List<Consultant> consultants){
         List<String> consultants2String = new LinkedList<String>();
         for(int i=0;i<consultants.size();i++){
-            consultants2String.add("Consultant ID:"+consultants.get(i).consultantId+", Full Name:"+consultants.get(i).fullName+", Age:"
-                    +consultants.get(i).age+", Consultant Resume:"+consultants.get(i).consultantResume.toString()+", Phone Number:"+
-                    consultants.get(i).phoneNumber);
+            consultants2String.add("Consultant ID:"+consultants.get(i).getConsultantId()+", Full Name:"+consultants.get(i).getFullName()+", Age:"
+                    +consultants.get(i).getAge()+", Consultant Resume:"+consultants.get(i).getConsultantResume().toString()+", Phone Number:"+
+                    consultants.get(i).getPhoneNumber());
         }
         return  consultants2String;
     }
-
     public void saveChangesStatus() throws IOException {
         String status = consultantCrud.exportChanges();
         JOptionPane.showMessageDialog(null, status,"Status",JOptionPane.INFORMATION_MESSAGE);
-
     }
-
 
 }

@@ -50,6 +50,18 @@ public class AccountancyController {
         return accountancyService.getAllPaymentsById(ids);
     }
 
+    @GetMapping("/payments/company/balance")
+    @ResponseStatus(HttpStatus.OK)
+    double getCompanyBalance() {
+        return accountancyService.getCompanyBalance();
+    }
+
+    @GetMapping("/payments/company/balance/payment/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    double getCompanyMoneyByPaymentId(@PathVariable Long id) {
+        return accountancyService.getCompanyMoneyById(id);
+    }
+
     @GetMapping("/payments/{id}")
     @ResponseStatus(HttpStatus.OK)
     Payment getPaymentById(@PathVariable("id") Long id) {
@@ -59,10 +71,10 @@ public class AccountancyController {
         return payment;
     }
 
-    @GetMapping("/payments/payment/workerId/{id}")
+    @GetMapping("/payments/worker/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Payment getPaymentByWorkerId(@PathVariable("id") Long id) {
-        return accountancyService.getPaymentByWorkerId(id);
+    List<Payment> getPaymentsByWorkerId(@PathVariable("id") Long id) {
+        return accountancyService.getPaymentsByWorkerId(id);
     }
 
     @GetMapping("/payments/salary/payment/{id}")
@@ -73,8 +85,8 @@ public class AccountancyController {
 
     @GetMapping("/payments/salary/worker/{id}")
     @ResponseStatus(HttpStatus.OK)
-    double getWorkerProfitByWorkerId(@PathVariable("id") Long id) {
-        return accountancyService.getWorkerProfitByWorkerId(id);
+    double getWorkerBalanceByWorkerId(@PathVariable("id") Long id) {
+        return accountancyService.getWorkerBalanceByWorkerId(id);
     }
 
     @PutMapping("/payments/update/{id}")
@@ -85,8 +97,8 @@ public class AccountancyController {
             throw new PaymentIdNotFoundException(id);
         else{
             payment.setId(id);
-            accountancyService.savePayment(payment);
-            return payment;
+            Payment newPayment = accountancyService.savePayment(payment);
+            return newPayment;
         }
     }
 

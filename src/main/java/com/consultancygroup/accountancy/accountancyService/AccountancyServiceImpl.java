@@ -19,7 +19,6 @@ public class AccountancyServiceImpl implements AccountancyService {
 
     @Override
     public Payment savePayment(Payment payment) {
-        accountancyRepository.save(payment);
 
         if(payment.getResume().equals(ConsultantResume.JUNIOR)) {
             payment.setCommissionCompany(0.15*payment.getPrice());
@@ -33,6 +32,8 @@ public class AccountancyServiceImpl implements AccountancyService {
             payment.setCommissionCompany(0.05*payment.getPrice());
             payment.setWorkerMoney(payment.getPrice() - payment.getCommissionCompany());
         }
+
+        accountancyRepository.save(payment);
 
         return payment;
     }
@@ -63,13 +64,19 @@ public class AccountancyServiceImpl implements AccountancyService {
     }
 
     @Override
-    public double getWorkerProfitByWorkerId(Long l) {
-        double profit = accountancyRepository.findProfitByWorkerId(l);
-        return profit;
+    public double getWorkerBalanceByWorkerId(Long l) {
+        double balance = accountancyRepository.findWorkerBalanceByWorkerId(l);
+        return balance;
     }
 
     @Override
-    public Payment getPaymentByWorkerId(Long l) {
-        return accountancyRepository.findPaymentWorkerId(l);
+    public List<Payment> getPaymentsByWorkerId(Long l) {
+        return accountancyRepository.findPaymentsByWorkerId(l);
     }
+
+    @Override
+    public double getCompanyBalance() { return accountancyRepository.findCompanyBalance(); }
+
+    @Override
+    public double getCompanyMoneyById(long l) { return accountancyRepository.findCompanyMoneyByPaymentId(l); }
 }

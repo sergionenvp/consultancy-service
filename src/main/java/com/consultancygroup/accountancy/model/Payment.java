@@ -21,8 +21,6 @@ public class Payment {
     private String cardHolderName;
     private Date date;
     private String cvc;
-
-    @Column(unique = true)
     private Long workerId;
     private ConsultantResume resume;
     private double workerMoney;

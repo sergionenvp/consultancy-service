@@ -317,4 +317,20 @@ public class AccountancyControllerTest {
 
         verify(accountancyMockService, times(1)).getCompanyBalance();
     }
+    @Test
+    public void testGetCompanyBalanceByPaymentId() throws JsonProcessingException, JSONException {
+        double companyMoney = 0.6;
+        String expectedJSON = om.writeValueAsString(companyMoney);
+
+        double serviceMoney = 0.6;
+        when(accountancyMockService.getCompanyMoneyById(any(Long.class))).thenReturn(serviceMoney);
+
+        String endpoint = "/payments/company/balance/payment/1";
+        ResponseEntity<String> responseEntity = testRestTemplate.getForEntity(endpoint, String.class);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        JSONAssert.assertEquals(expectedJSON, responseEntity.getBody(), true);
+
+        verify(accountancyMockService, times(1)).getCompanyMoneyById(any(Long.class));
+    }
 }

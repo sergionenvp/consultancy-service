@@ -10,7 +10,7 @@
 
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>appointments-microservice</module>
+        <module>consultant-microservice</module>
         <module>accountancy-microservice</module>
     </modules>
 

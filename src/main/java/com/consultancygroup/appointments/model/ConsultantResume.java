@@ -1,4 +1,4 @@
-package com.consultancygroup.consultant.Model;
+package com.consultancygroup.appointments.model;
 
 public enum ConsultantResume {
     JUNIOR,

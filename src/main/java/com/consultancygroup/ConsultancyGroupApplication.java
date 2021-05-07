@@ -4,11 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ConsultancyServiceApplication {
+public class ConsultancyGroupApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ConsultancyServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ConsultancyGroupApplication.class, args);
 
+    }
 
 }

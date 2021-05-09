@@ -176,7 +176,6 @@ public class    AccountancyCrud {
         else
             return "Error: changes did not all save successfully.";
     }
-
     public void generateNetProfit() throws IOException {
         HttpGet request = new HttpGet("http://localhost:9001/payments/company/balance");
         CloseableHttpClient httpClient = HttpClients.createDefault();

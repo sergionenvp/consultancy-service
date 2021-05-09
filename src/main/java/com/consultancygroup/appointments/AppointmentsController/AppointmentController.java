@@ -3,14 +3,18 @@ package com.consultancygroup.appointments.AppointmentsController;
 import com.consultancygroup.appointments.AppointmentsService.AppointmentService;
 import com.consultancygroup.appointments.model.Appointment;
 import com.consultancygroup.appointments.exceptions.AppointmentNumException;
+import com.consultancygroup.appointments.serialization.Serialization;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -43,9 +47,9 @@ public class AppointmentController {
     }
 
     //returns consultant's appointments on particular date
-    @GetMapping("/appointments/consultant/{id}")
-    public List<Appointment> getAppointmentByConsultantAndDate(@PathVariable("id")Long consultantId,LocalDate date) {
-        return appointmentService.findAppsByConsultantAndDate(consultantId,date);
+    @GetMapping("/appointments/date/{id}/{date}")
+    public List<Appointment> getAppointmentByConsultantAndDate(@PathVariable("id")Long id,@PathVariable("date") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) LocalDate date) {
+        return (appointmentService.findAppsByConsultantAndDate(id,date));
     }
 
     //returns all the consultant's appointments
@@ -53,6 +57,7 @@ public class AppointmentController {
     public List<Appointment> getAllAppointmentsByConsultantId(@PathVariable("id")Long consultantId) {
         return appointmentService.findAllAppointmentsByConsultant(consultantId);
     }
+
 
     @PutMapping("/appointments/update/{id}")
     public Appointment updateAppointment(@Valid @RequestBody Appointment appointment, @PathVariable("id")Long appNum) {
@@ -66,6 +71,13 @@ public class AppointmentController {
         return appointment;
     }
 
+    @GetMapping("/appointment/export")
+    public void write(){
+        List<Appointment> appointments = appointmentService.findAllAppointments();
+        Serialization serialization = new Serialization();
+        serialization.export(appointments);
+    }
+
     @DeleteMapping("/appointments/id/{id}")
     public void deleteByAppNum(@PathVariable("id") Long appNum) {
         appointmentService.deleteAppointmentByAppNum(appNum);
@@ -75,5 +87,6 @@ public class AppointmentController {
     public void deleteAllAppointments() {
         appointmentService.deleteAllAppointments();
     }
+
 
 }

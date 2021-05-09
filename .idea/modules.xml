@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/consultancy-service.iml" filepath="$PROJECT_DIR$/consultancy-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/accountancy-microservice/accountancy-microservice.iml" filepath="$PROJECT_DIR$/accountancy-microservice/accountancy-microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/consultant-microservice/consultancy-service.iml" filepath="$PROJECT_DIR$/consultant-microservice/consultancy-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/root.iml" filepath="$PROJECT_DIR$/root.iml" />
     </modules>
   </component>
 </project>

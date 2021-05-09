@@ -127,7 +127,7 @@ public class SubMenu {
         JButton manageAccountancy = new JButton();
         manageAccountancy.setBackground(Color.WHITE);
         manageAccountancy.setFont(new Font("Helvetica", Font.BOLD, 20));
-        manageAccountancy.setText("Manage Accountancy.");
+        manageAccountancy.setText("Accountancy Report Toolkit.");
         manageAccountancy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

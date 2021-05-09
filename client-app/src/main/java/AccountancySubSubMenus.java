@@ -98,8 +98,8 @@ public class AccountancySubSubMenus {
         findAllPayments.setBackground(Color.WHITE);
         findAllPayments.setText("Find all payments");
         findAllPayments.setFont(new Font("Helvetica",Font.BOLD,20));
-        JButton findPaymentById = new JButton();
-        findPaymentById.addActionListener(new ActionListener() {
+        JButton findPaymentByPaymentId = new JButton();
+        findPaymentByPaymentId.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -109,12 +109,27 @@ public class AccountancySubSubMenus {
                 }
             }
         });
-        findPaymentById.setBackground(Color.WHITE);
-        findPaymentById.setText("Find payment by ID");
-        findPaymentById.setFont(new Font("Helvetica",Font.BOLD,20));
+        findPaymentByPaymentId.setBackground(Color.WHITE);
+        findPaymentByPaymentId.setText("Find payment by payment id");
+        findPaymentByPaymentId.setFont(new Font("Helvetica",Font.BOLD,20));
+        JButton findPaymentByConsultant = new JButton();
+        findPaymentByConsultant.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    findPaymentByConsultant();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        findPaymentByConsultant.setBackground(Color.WHITE);
+        findPaymentByConsultant.setText("Find payment by consultant");
+        findPaymentByConsultant.setFont(new Font("Helvetica",Font.BOLD,20));
 
         panel.add(findAllPayments);
-        panel.add(findPaymentById);
+        panel.add(findPaymentByPaymentId);
+        panel.add(findPaymentByConsultant);
         frame.add(panel);
         frame.setSize(500, 250);
         frame.setLocationRelativeTo(null);
@@ -130,21 +145,75 @@ public class AccountancySubSubMenus {
         return  payments2String;
     }
     public void findPaymentByPaymentId() throws IOException {
-        JTextField paymentId = new JTextField("Insert payment id");
-        Object[] paymentDetails = {
-                "Payment ID:", paymentId
-        };
-        int option = JOptionPane.showConfirmDialog(null, paymentDetails, "Find payment by payment id.", JOptionPane.OK_CANCEL_OPTION);
-        if(option==JOptionPane.OK_OPTION){
-            // create a JTextArea
-            JTextArea textArea = new JTextArea(6, 25);
-            textArea.setText(accountancyCrud.getPaymentById(paymentId.getText()));
-            textArea.setEditable(false);
-            // wrap a scrollpane around it
-            JScrollPane scrollPane = new JScrollPane(textArea);
-            // display them in a message dialog
-            JOptionPane.showMessageDialog(null, textArea,"Result",JOptionPane.INFORMATION_MESSAGE);
+        List<String> payments = convertPaymentListToStringList(accountancyCrud.getAllPayments());
+        if(payments.size()!=0) {
+            JTextField paymentId = new JTextField("Insert payment id");
+            Object[] paymentDetails = {
+                    "Payment ID:", paymentId
+            };
+            int option = JOptionPane.showConfirmDialog(null, paymentDetails, "Find payment by payment id.", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                // create a JTextArea
+                JTextArea textArea = new JTextArea(6, 25);
+                textArea.setText(accountancyCrud.getPaymentById(paymentId.getText()));
+                textArea.setEditable(false);
+                // wrap a scrollpane around it
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                // display them in a message dialog
+                JOptionPane.showMessageDialog(null, textArea, "Result", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else{
+            JOptionPane.showMessageDialog(null, "No payments in system.", "Warning", JOptionPane.WARNING_MESSAGE);
+
         }
+    }
+    public void findPaymentByConsultant() throws IOException {
+        List<String> payments = convertPaymentListToStringList(accountancyCrud.getAllPayments());
+
+
+        if(payments.size()!=0) {
+
+            List<String> consultants = consultantSubSubMenus.covertConsultantListToStringList(consultantCrud.getAllConsultants());
+            String[] consultantArray = new String[consultants.size()];
+            consultants.toArray(consultantArray);
+
+            JComboBox consultantBox  = new JComboBox(consultantArray);
+            Object[] consultantDetails = {
+                    "Select consultant for which payments you want to see:",consultantBox,
+
+            };
+            int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Getting payments by consultant.", JOptionPane.OK_CANCEL_OPTION);
+            if(option==JOptionPane.OK_OPTION) {
+                JPanel panel = new JPanel(new BorderLayout());
+                String consultantId = String.valueOf(consultantCrud.getAllConsultants().get(consultantBox.getSelectedIndex()).getConsultantId());
+                List<String> paymentList= convertPaymentListToStringList(accountancyCrud.getPaymentByConsultant(consultantId));
+                if(paymentList.size()!=0) {
+                    final JList<String> list = new JList<String>(payments.toArray(new String[payments.size()]));
+                    JScrollPane scrollPane = new JScrollPane();
+                    scrollPane.setViewportView(list);
+                    list.setLayoutOrientation(JList.VERTICAL);
+                    panel.add(scrollPane);
+                    JFrame frame = new JFrame("List of payments for consultant "+consultantCrud.getAllConsultants().get(consultantBox.getSelectedIndex()).getFullName());
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.add(panel);
+                    frame.setSize(800, 250);
+                    frame.setLocationRelativeTo(null);
+                    frame.setVisible(true);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "No payments for consultant "+consultantCrud.getAllConsultants().get(consultantBox.getSelectedIndex()).getFullName(),"Warning",JOptionPane.INFORMATION_MESSAGE);
+
+                }
+
+            }
+
+        }else {
+            JOptionPane.showMessageDialog(null, "No payments in system.", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+
+
+
+
     }
     public void deletePaymentMenu() {
         JFrame frame = new JFrame();
@@ -259,6 +328,20 @@ public class AccountancySubSubMenus {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         panel.setBackground(Color.YELLOW);
+        JButton netProfit = new JButton();
+        netProfit.setBackground(Color.WHITE);
+        netProfit.setText("Company's net profit");
+        netProfit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    generateNetProfit();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        netProfit.setFont(new Font("Helvetica",Font.BOLD,20));
         JButton consultantEarningByPaymentId = new JButton();
         consultantEarningByPaymentId.setBackground(Color.WHITE);
         consultantEarningByPaymentId.setText("Find consultant's earning  by payment id");
@@ -273,26 +356,112 @@ public class AccountancySubSubMenus {
             }
         });
         consultantEarningByPaymentId.setFont(new Font("Helvetica",Font.BOLD,20));
+        JButton companyCommissionByPaymentID = new JButton();
+        companyCommissionByPaymentID.setBackground(Color.WHITE);
+        companyCommissionByPaymentID.setText("Find company's profit by payment id.");
+        companyCommissionByPaymentID.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    generateProfitByPaymentID();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        companyCommissionByPaymentID.setFont(new Font("Helvetica",Font.BOLD,20));
+
+
+        JButton consultantNetEarning = new JButton();
+        consultantNetEarning.setBackground(Color.WHITE);
+        consultantNetEarning.setText("Find some consultant's net earning.");
+        consultantNetEarning.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    consultantNetEarning();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        consultantNetEarning.setFont(new Font("Helvetica",Font.BOLD,20));
+
+        panel.add(netProfit);
+        panel.add(companyCommissionByPaymentID);
         panel.add(consultantEarningByPaymentId);
+        panel.add(consultantNetEarning);
         frame.add(panel);
         frame.setSize(600, 250);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
-    public void consultantEarningByPaymentId() throws IOException {
 
-        JTextField paymentId = new JTextField("Insert payment id here.");
-        Object[] consultantDetails = {
-                "Insert payment id to find the respective consultant earning:", paymentId,
-        };
-        int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Get consultant earning by payment id", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-            accountancyCrud.consultantEarningByPaymentId(paymentId.getText());
+    private void consultantNetEarning() throws IOException {
+        List<String> consultants =  consultantSubSubMenus.covertConsultantListToStringList(consultantCrud.getAllConsultants());
+        if(consultants.size()!=0)
+        {
+
+            String[] consultantArray = new String[consultants.size()];
+            consultants.toArray(consultantArray);
+            JComboBox consultantBox = new JComboBox(consultantArray);
+            Object[] consultantDetails = {
+                    "Select consultant to find his/her net earning:", consultantBox,
+            };
+            int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Finding Consultant Net Earning", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                String consultantId = String.valueOf(consultantCrud.getAllConsultants().get(consultantBox.getSelectedIndex()).getConsultantId());
+                accountancyCrud.consultantNetEarning(consultantId);
+            }
+          }else {
+            JOptionPane.showMessageDialog(null, "No consultant in system", "Warning", JOptionPane.WARNING_MESSAGE);
+
         }
+
+    }
+
+
+
+    private void generateProfitByPaymentID() throws IOException {
+        List<String> payments =  convertPaymentListToStringList(accountancyCrud.getAllPayments());
+        if(payments.size()!=0) {
+            JTextField paymentId = new JTextField("Insert payment id here.");
+            Object[] consultantDetails = {
+                    "Insert payment id to find the respective consultant earning:", paymentId,
+            };
+            int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Get consultant earning by payment id", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                accountancyCrud.generateProfitByPaymentID(paymentId.getText());
+            }
+        }
+        else
+            JOptionPane.showMessageDialog(null, "No payments in system.", "Warning", JOptionPane.WARNING_MESSAGE);
+
+    }
+
+    private void generateNetProfit() throws IOException {
+        accountancyCrud.generateNetProfit();
+    }
+
+    public void consultantEarningByPaymentId() throws IOException {
+        List<String> payments =  convertPaymentListToStringList(accountancyCrud.getAllPayments());
+        if(payments.size()!=0) {
+            JTextField paymentId = new JTextField("Insert payment id here.");
+            Object[] consultantDetails = {
+                    "Insert payment id to find the respective consultant earning:", paymentId,
+            };
+            int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Get consultant earning by payment id", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                accountancyCrud.consultantEarningByPaymentId(paymentId.getText());
+            }
+        }else
+            JOptionPane.showMessageDialog(null, "No payments in system.", "Warning", JOptionPane.WARNING_MESSAGE);
+
     }
     public void saveChangesStatus() throws IOException {
         String status = accountancyCrud.exportChanges();
         JOptionPane.showMessageDialog(null, status,"Status",JOptionPane.INFORMATION_MESSAGE);
     }
+
 }

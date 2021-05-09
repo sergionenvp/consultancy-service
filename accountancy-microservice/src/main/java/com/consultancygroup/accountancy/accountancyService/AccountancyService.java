@@ -21,7 +21,11 @@ public interface AccountancyService {
 
     public double getWorkerProfitByPaymentId(Long l);
 
-    public double getWorkerProfitByWorkerId(Long l);
+    public double getWorkerBalanceByWorkerId(Long l);
 
-    public Payment getPaymentByWorkerId(Long l);
+    public List<Payment> getPaymentsByWorkerId(Long l);
+
+    public double getCompanyBalance();
+
+    public double getCompanyMoneyById(long l);
 }

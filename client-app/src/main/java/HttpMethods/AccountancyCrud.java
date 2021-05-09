@@ -1,5 +1,4 @@
 package HttpMethods;
-import Models.Consultant;
 import Models.ConsultantResume;
 import Models.Payment;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-public class AccountancyCrud {
+public class    AccountancyCrud {
+    ConsultantCrud consultantCrud = new ConsultantCrud();
     private static final ObjectMapper om = new ObjectMapper();
     // post accountancy
     public String createPayment(String cardHolderName, String cardNumber, String cvc, Long workerId, ConsultantResume resume, String price) throws IOException {
@@ -148,7 +148,7 @@ public class AccountancyCrud {
         if(response.getStatusLine().getStatusCode()==200)
         {
             String consultantEarning = EntityUtils.toString(response.getEntity());
-            JOptionPane.showMessageDialog(null, "Consultant earning for payment "+paymentId+" is "+ consultantEarning ,"Result",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Consultant earning for payment "+paymentId+" is $"+ consultantEarning ,"Result",JOptionPane.INFORMATION_MESSAGE);
 
         }
         else
@@ -176,4 +176,86 @@ public class AccountancyCrud {
         else
             return "Error: changes did not all save successfully.";
     }
+
+    public void generateNetProfit() throws IOException {
+        HttpGet request = new HttpGet("http://localhost:9001/payments/company/balance");
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpResponse response = httpClient.execute(request);
+        // 1. convert JSON array to Array object
+        if(response.getStatusLine().getStatusCode()==200) {
+            String netProfit = EntityUtils.toString(response.getEntity());
+            JOptionPane.showMessageDialog(null,"Company's net profit is "+netProfit, "Net Profit", JOptionPane.INFORMATION_MESSAGE);
+        }
+            else
+        {
+            // create a JTextArea
+            JTextArea textArea = new JTextArea(6, 25);
+            textArea.setText(EntityUtils.toString(response.getEntity()));
+            textArea.setEditable(false);
+            // wrap a scrollpane around it
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            // display them in a message dialog
+            JOptionPane.showMessageDialog(null, scrollPane,"Warning",JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
+
+    public void generateProfitByPaymentID(String paymentID) throws IOException {
+        HttpGet request = new HttpGet("http://localhost:9001/payments/company/balance/payment/"+paymentID);
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpResponse response = httpClient.execute(request);
+        // 1. convert JSON array to Array object
+        if(response.getStatusLine().getStatusCode()==200) {
+            String netProfit = EntityUtils.toString(response.getEntity());
+            JOptionPane.showMessageDialog(null,"Company's net profit is "+netProfit, "Net Profit", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            // create a JTextArea
+            JTextArea textArea = new JTextArea(6, 25);
+            textArea.setText(EntityUtils.toString(response.getEntity()));
+            textArea.setEditable(false);
+            // wrap a scrollpane around it
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            // display them in a message dialog
+            JOptionPane.showMessageDialog(null, scrollPane,"Warning",JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    public List<Payment> getPaymentByConsultant(String consultantId) throws IOException {
+        HttpGet request = new HttpGet("http://localhost:9001/payments/worker/"+consultantId);
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpResponse response = httpClient.execute(request);
+        // 1. convert JSON array to Array objects
+        List<Payment> payments = Arrays.asList(om.readValue(EntityUtils.toString(response.getEntity()), Payment[].class));
+        return payments;
+
+    }
+
+    public void consultantNetEarning(String consultantId) throws IOException {
+        HttpGet request = new HttpGet("http://localhost:9001/payments/salary/worker/"+consultantId);
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpResponse response = httpClient.execute(request);
+        if(response.getStatusLine().getStatusCode()==200)
+        {
+            String consultantDetails = consultantCrud.getConsultantById(consultantId);
+            String consultantEarning = EntityUtils.toString(response.getEntity());
+            String message ="Consultant Details: "+consultantDetails+"\n"+"In total  consultant earned: $"+consultantEarning;
+            JOptionPane.showMessageDialog(null, message,"Net Earning of consultant",JOptionPane.INFORMATION_MESSAGE);
+
+        }
+        else {
+            // create a JTextArea
+            JTextArea textArea = new JTextArea(6, 25);
+            textArea.setText(EntityUtils.toString(response.getEntity()));
+            textArea.setEditable(false);
+            // wrap a scrollpane around it
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            // display them in a message dialog
+            JOptionPane.showMessageDialog(null, scrollPane,"Warning",JOptionPane.WARNING_MESSAGE);
+
+        };
+
+    }
 }
+

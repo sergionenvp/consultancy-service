@@ -17,10 +17,14 @@ import java.util.List;
 @RestController
 @Transactional
 public class AccountancyController {
+
     @Autowired
     AccountancyService accountancyService;
+
     @Autowired
     ModelMapper modelMapper;
+
+    //done
     @PostMapping("/payments")
     @ResponseStatus(HttpStatus.CREATED)
     Payment newPayment(@Valid @RequestBody Payment paymentRequest) {
@@ -28,21 +32,48 @@ public class AccountancyController {
         createdPayment = accountancyService.savePayment(createdPayment);
         return createdPayment;
     }
+
+    //done
     @DeleteMapping("/payments/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     void deletePaymentById(@PathVariable Long id) {
         accountancyService.deletePaymentById(id);
     }
+
+    //done
     @GetMapping("/payments/all")
     @ResponseStatus(HttpStatus.OK)
     List<Payment> getAllPayments() {
         return accountancyService.getAllPayments();
     }
+
+    //done
     @GetMapping("/payments/all/{ids}")
     @ResponseStatus(HttpStatus.OK)
     List<Payment> getAllPaymentsById(@PathVariable("ids") List<Long> ids) {
         return accountancyService.getAllPaymentsById(ids);
     }
+
+
+    /*
+        returns total profit made by company
+     */
+
+    //done
+    @GetMapping("/payments/company/balance")
+    @ResponseStatus(HttpStatus.OK)
+    double getCompanyBalance() {
+        return accountancyService.getCompanyBalance();
+    }
+
+    //done
+    @GetMapping("/payments/company/balance/payment/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    double getCompanyMoneyByPaymentId(@PathVariable Long id) {
+        return accountancyService.getCompanyMoneyById(id);
+    }
+
+    //done
     @GetMapping("/payments/{id}")
     @ResponseStatus(HttpStatus.OK)
     Payment getPaymentById(@PathVariable("id") Long id) {
@@ -52,24 +83,28 @@ public class AccountancyController {
         return payment;
     }
 
-    @GetMapping("/payments/payment/workerId/{id}")
+    //done
+    @GetMapping("/payments/worker/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Payment getPaymentByWorkerId(@PathVariable("id") Long id) {
-        return accountancyService.getPaymentByWorkerId(id);
+    List<Payment> getPaymentsByWorkerId(@PathVariable("id") Long id) {
+        return accountancyService.getPaymentsByWorkerId(id);
     }
 
+    //done
     @GetMapping("/payments/salary/payment/{id}")
     @ResponseStatus(HttpStatus.OK)
     double getWorkerProfitByPaymentId(@PathVariable("id") Long id) {
         return accountancyService.getWorkerProfitByPaymentId(id);
     }
 
+    //done
     @GetMapping("/payments/salary/worker/{id}")
     @ResponseStatus(HttpStatus.OK)
-    double getWorkerProfitByWorkerId(@PathVariable("id") Long id) {
-        return accountancyService.getWorkerProfitByWorkerId(id);
+    double getWorkerBalanceByWorkerId(@PathVariable("id") Long id) {
+        return accountancyService.getWorkerBalanceByWorkerId(id);
     }
-    //
+
+    //done
     @PutMapping("/payments/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     Payment changePayment(@Valid @RequestBody Payment payment, @PathVariable("id") Long id) {
@@ -78,16 +113,16 @@ public class AccountancyController {
             throw new PaymentIdNotFoundException(id);
         else{
             payment.setId(id);
-            accountancyService.savePayment(payment);
-            return payment;
+            Payment newPayment = accountancyService.savePayment(payment);
+            return newPayment;
         }
     }
-
     //done
     @DeleteMapping("/payments/delete/all")
     void deleteAllPayments(){
         accountancyService.deleteAllPayments();
     }
+
     //
     @GetMapping("/payments/export")
     public void write(){
@@ -95,5 +130,4 @@ public class AccountancyController {
         Serialization serialization = new Serialization();
         serialization.export(payments);
     }
-
 }

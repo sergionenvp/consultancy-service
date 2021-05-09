@@ -68,4 +68,3 @@ public class Appointment implements Serializable {
         return date;
     }*/
 }
-//https://github.com/getstarted-spring/restcontroller-datetime-format-json-response/blob/master/src/main/resources/META-INF/spring.factories

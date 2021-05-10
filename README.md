@@ -17,5 +17,5 @@ bash runLinux.sh
 runWindows.bat
 ```
 
-# The client includes a fully functional GUI for ease of use communicating to each micro service via HttpClient on ports 9001 9002 9003, so before starting the application please make sure that you do not have any app running on these ports.
+# The client includes a fully functional GUI for ease of use communicating to each micro service via HttpClient on local ports 9001 9002 9003, so before starting the application please make sure that you do not have any app running on these ports.
 

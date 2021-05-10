@@ -16,3 +16,5 @@ bash runLinux.sh
 ```
 runWindows.bat
 ```
+
+# Application Manual

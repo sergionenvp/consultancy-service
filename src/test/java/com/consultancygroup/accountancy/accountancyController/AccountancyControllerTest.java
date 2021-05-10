@@ -224,7 +224,7 @@ public class AccountancyControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> entity = new HttpEntity<>(om.writeValueAsString(payment), headers);
+        HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(payment), headers);
 
         String endpoint = "/payments/update/1";
 
@@ -279,7 +279,7 @@ public class AccountancyControllerTest {
 
     @Test
     public void testFindPaymentsByWorkerId() throws JsonProcessingException, JSONException {
-        List<Payment> payments = new ArrayList<>();
+        List<Payment> payments = new ArrayList<Payment>();
         payment2.setWorkerId(1L);
         payment3.setWorkerId(1L);
         payments.add(payment1);
@@ -290,7 +290,7 @@ public class AccountancyControllerTest {
 
         String expectedJSON = om.writeValueAsString(payments);
 
-        List<Payment> servicePayments = new ArrayList<>(){ {add(payment1); add(payment2); add(payment3);} };;
+        List<Payment> servicePayments = new ArrayList<Payment>(){ {add(payment1); add(payment2); add(payment3);} };;
         when(accountancyMockService.getPaymentsByWorkerId(any(Long.class))).thenReturn(servicePayments);
 
         ResponseEntity<String> response = testRestTemplate.getForEntity(endpoint, String.class);

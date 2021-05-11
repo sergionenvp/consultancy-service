@@ -99,8 +99,8 @@ public class AppointmentControllerTest {
     @Test
     public void testGetAppointmentByConsultantAndDate() throws Exception{
 
-        LocalDateTime date = LocalDateTime.of(2021,5,10,10,30);
-        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,5,10,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        LocalDateTime date = LocalDateTime.of(2021,6,20,10,30);
+        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,6,20,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
 
         List<Appointment> consultantAppList = new ArrayList<>();
         consultantAppList.add(appointment);
@@ -119,7 +119,7 @@ public class AppointmentControllerTest {
 
     @Test
     public void testGetAllAppointmentsByConsultantId() throws Exception{
-        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,5,10,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,6,10,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
 
         List<Appointment> consultantAppList = new LinkedList<Appointment>();
         consultantAppList.add(appointment);

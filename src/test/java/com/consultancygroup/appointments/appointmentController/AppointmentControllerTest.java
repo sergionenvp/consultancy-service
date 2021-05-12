@@ -52,8 +52,8 @@ public class AppointmentControllerTest {
 
     @BeforeEach
     public void setup() {
-         appointment1 = new Appointment(1L,2L,123456L,79123456,LocalDateTime.of(2021,5,10,10,00),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
-         appointment2 = new Appointment(11L,21L,123457L,79123457,LocalDateTime.of(2021,5,11,10,00),200.0, AppointmentStatus.AVAILABLE,ConsultantResume.EXECUTIVE);
+         appointment1 = new Appointment(1L,2L,123456L,79123456,LocalDateTime.of(2021,6,20,10,00),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+         appointment2 = new Appointment(11L,21L,123457L,79123457,LocalDateTime.of(2021,6,21,10,00),200.0, AppointmentStatus.AVAILABLE,ConsultantResume.EXECUTIVE);
 
          appointmentsList.add(appointment1);
          appointmentsList.add(appointment2);
@@ -63,12 +63,12 @@ public class AppointmentControllerTest {
     public void testCreateAppointment() throws Exception{
 
 
-        Appointment appointment = new Appointment(1L,2L,123456L,79123456,LocalDateTime.of(2021,5,10,10,00),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        Appointment appointment = new Appointment(1L,2L,123456L,79123456,LocalDateTime.of(2021,6,20,10,00),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
 
         String expectedResponseBody = mapper.writeValueAsString(appointment);
         String endpoint = "/appointments";
 
-        Appointment app = new Appointment(1L,2L,123456L,79123456,LocalDateTime.of(2021,5,10,10,00),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        Appointment app = new Appointment(1L,2L,123456L,79123456,LocalDateTime.of(2021,6,20,10,00),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
         when(appointmentMockService.saveAppointment(any(Appointment.class))).thenReturn(app);
 
         ResponseEntity<String> responseEntity = testRestTemplate.postForEntity(endpoint, appointment, String.class);
@@ -99,8 +99,8 @@ public class AppointmentControllerTest {
     @Test
     public void testGetAppointmentByConsultantAndDate() throws Exception{
 
-        LocalDateTime date = LocalDateTime.of(2021,5,10,10,30);
-        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,5,10,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        LocalDateTime date = LocalDateTime.of(2021,6,20,10,30);
+        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,6,20,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
 
         List<Appointment> consultantAppList = new ArrayList<>();
         consultantAppList.add(appointment);
@@ -119,7 +119,7 @@ public class AppointmentControllerTest {
 
     @Test
     public void testGetAllAppointmentsByConsultantId() throws Exception{
-        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,5,10,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,6,10,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
 
         List<Appointment> consultantAppList = new LinkedList<Appointment>();
         consultantAppList.add(appointment);
@@ -138,11 +138,11 @@ public class AppointmentControllerTest {
 
     @Test
     public void testUpdateAppointment() throws Exception{
-        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,5,10,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        Appointment appointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,6,20,10,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
         when(appointmentMockService.findAppByAppNum(789101L)).thenReturn(appointment);
 
-        Appointment updateAppointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,5,10,13,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
-        Appointment expectedAppointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,5,10,13,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        Appointment updateAppointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,6,20,13,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
+        Appointment expectedAppointment = new Appointment(1L,3L,789101L,99443322,LocalDateTime.of(2021,6,20,13,30),100.0, AppointmentStatus.AVAILABLE,ConsultantResume.JUNIOR);
         when(appointmentMockService.saveAppointment(any(Appointment.class))).thenReturn(expectedAppointment);
 
         HttpHeaders headers = new HttpHeaders();

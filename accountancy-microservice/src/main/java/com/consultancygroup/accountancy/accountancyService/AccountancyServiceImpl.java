@@ -32,9 +32,7 @@ public class AccountancyServiceImpl implements AccountancyService {
             payment.setCommissionCompany(0.05*payment.getPrice());
             payment.setWorkerMoney(payment.getPrice() - payment.getCommissionCompany());
         }
-
         accountancyRepository.save(payment);
-
         return payment;
     }
     //tested

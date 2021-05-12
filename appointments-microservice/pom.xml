@@ -1,24 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.consultancygroup</groupId>
+    <artifactId>appointments-microservice</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.1.2.RELEASE</version>
+        <relativePath/>
     </parent>
-    <groupId>com</groupId>
-    <artifactId>consultancy-group</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>consultancy-group</name>
-    <description>Consultancy-service</description>
+    <!-- Properties -->
     <properties>
+        <start-class>com.consultancygroup.ConsultancyGroupApplication</start-class>
         <java.version>1.8</java.version>
-    </properties>
-    <dependencies>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- junit-jupiter-engine -->
+        <unit-tests.skip>false</unit-tests.skip>
+        <integration-tests.skip>false</integration-tests.skip>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
+        <project.artifact.name>${project.artifactId}</project.artifact.name>
+        <build.number>LOCAL</build.number>
+        <unit-tests.skip>false</unit-tests.skip>
+        <integration-tests.skip>false</integration-tests.skip>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.language>java</sonar.language>
+        <sonar.exclusions>
+            **/domain/*
+        </sonar.exclusions>
+        <surefire.forkNumber>0</surefire.forkNumber>
+        <jacoco.dataFile>${project.basedir}/../target/jacoco.exec</jacoco.dataFile>
+        <jacoco.reporting.outputDirectory>${project.basedir}/../target/reports/jacoco</jacoco.reporting.outputDirectory>
+        <jacoco.inclNoLocationClasses>true</jacoco.inclNoLocationClasses>
+        <junit-jupiter.version>5.6.0</junit-jupiter.version>
+
+    </properties>
+
+
+
+
+
+    <dependencies><!-- junit-jupiter-engine -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spi</artifactId>
+            <version>3.0.0</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -73,11 +109,6 @@
             <version>1.1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
         <!-- custom matchers -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -90,24 +121,97 @@
             <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spring-web</artifactId>
+            <version>2.9.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.4.0</version>
+                <configuration>
+                    <mainClass>com.consultancygroup.ConsultancyGroupApplication</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+            </plugin>
+
+            <!-- Runs JUnit tests under code coverage and creates a coverage report (target/site/jacoco/index.html). -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.90</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
+                        <exclude>com/eldisol/jacoboot/JacobootApplication.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
+
+
+            <!-- optional, for mvn site -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+
+        </plugins>
+    </reporting>
 
 </project>

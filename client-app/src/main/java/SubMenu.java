@@ -6,6 +6,7 @@ import java.io.IOException;
 public class SubMenu {
     ConsultantSubSubMenus consultantMenu = new ConsultantSubSubMenus();
     AccountancySubSubMenus accountancySubSubMenus = new AccountancySubSubMenus();
+    AppointmentSubSubMenus appointmentSubSubMenus = new AppointmentSubSubMenus();
     public void ConsultantSubMenu() {
         JFrame frame = new JFrame();
         JPanel panel = new JPanel();
@@ -145,8 +146,76 @@ public class SubMenu {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
+    public void AppointmentSubMenu() {
+        JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        panel.setBackground(Color.YELLOW);
+        JButton addAppointment = new JButton();
+        addAppointment.setBackground(Color.WHITE);
+        addAppointment.setText("Add an appointment");
+        addAppointment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    appointmentSubSubMenus.addAppointmentMenu();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        addAppointment.setFont(new Font("Helvetica", Font.BOLD, 20));
+        JButton searchTools = new JButton();
+        searchTools.setBackground(Color.WHITE);
+        searchTools.setText("Search tools");
+        searchTools.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    appointmentSubSubMenus.searchMenu();
+
+            }
+        });
+        searchTools.setFont(new Font("Helvetica", Font.BOLD, 20));
+        JButton updateAppointment = new JButton();
+        updateAppointment.setBackground(Color.WHITE);
+        updateAppointment.setText("Update an appointment");
+        updateAppointment.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    appointmentSubSubMenus.updateAppointment();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        updateAppointment.setFont(new Font("Helvetica", Font.BOLD, 20));
+
+        JButton deleteAppointments = new JButton();
+        deleteAppointments.setBackground(Color.WHITE);
+        deleteAppointments.setText("Delete appointment menu");
+        deleteAppointments.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                    appointmentSubSubMenus.deleteAppointmentsMenu();
+
+            }
+        });
+        deleteAppointments.setFont(new Font("Helvetica", Font.BOLD, 20));
+        panel.add(addAppointment);
+        panel.add(searchTools);
+        panel.add(updateAppointment);
+        panel.add(deleteAppointments);
+        frame.add(panel);
+        frame.setSize(400, 350);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+    }
     public void exportChanges() throws IOException {
         consultantMenu.saveChangesStatus();
         accountancySubSubMenus.saveChangesStatus();
+        appointmentSubSubMenus.saveChangesStatus();
     }
 }

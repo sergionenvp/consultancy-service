@@ -27,6 +27,8 @@ public class AppointmentController {
     @Autowired
     ModelMapper modelMapper;
 
+    //implemented in client app
+    //done
     @PostMapping("/appointments")
     @ResponseStatus(HttpStatus.CREATED)
     Appointment createAppointment(@Valid @RequestBody Appointment newApp) {
@@ -37,6 +39,7 @@ public class AppointmentController {
         return appointment;
     }
 
+    //implemented in client app
     @GetMapping("/appointments/id/{id}")
     public Appointment getAppointmentByAppointmentNum(@PathVariable("id")Long appNum) {
         Appointment app = appointmentService.findAppByAppNum(appNum);
@@ -46,19 +49,21 @@ public class AppointmentController {
         return app;
     }
 
+
     //returns consultant's appointments on particular date
     @GetMapping("/appointments/date/{id}/{date}")
     public List<Appointment> getAppointmentByConsultantAndDate(@PathVariable("id")Long id,@PathVariable("date") @DateTimeFormat(iso= DateTimeFormat.ISO.DATE) LocalDate date) {
         return (appointmentService.findAppsByConsultantAndDate(id,date));
     }
 
+    //implemented in client app
     //returns all the consultant's appointments
     @GetMapping("/appointments/consultant/{id}")
     public List<Appointment> getAllAppointmentsByConsultantId(@PathVariable("id")Long consultantId) {
         return appointmentService.findAllAppointmentsByConsultant(consultantId);
     }
 
-
+    //implemented
     @PutMapping("/appointments/update/{id}")
     public Appointment updateAppointment(@Valid @RequestBody Appointment appointment, @PathVariable("id")Long appNum) {
         Appointment app = appointmentService.findAppByAppNum(appNum);
@@ -70,6 +75,7 @@ public class AppointmentController {
         }
         return appointment;
     }
+
 
     @GetMapping("/appointment/export")
     public void write(){

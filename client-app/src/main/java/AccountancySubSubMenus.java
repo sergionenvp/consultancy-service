@@ -22,7 +22,7 @@ public class AccountancySubSubMenus {
             Object[] consultantDetails = {
                     "Select consultant to create payment on:", consultantBox,
             };
-            int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Adding a new consultant", JOptionPane.OK_CANCEL_OPTION);
+            int option = JOptionPane.showConfirmDialog(null, consultantDetails, "Adding a new payment", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
                 String[] worker = consultantSubSubMenus.getConsultant(consultantArray[consultantBox.getSelectedIndex()]);
                 // 0-> id

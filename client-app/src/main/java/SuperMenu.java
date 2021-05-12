@@ -78,6 +78,13 @@ public class SuperMenu {
         manageAppointmentsButton.setBackground(Color.WHITE);
         manageAppointmentsButton.setFont(new Font("Helvetica",Font.BOLD,20));
         manageAppointmentsButton.setText("Manage Appointments");
+        manageAppointmentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                subMenu.AppointmentSubMenu();
+            }
+        });
+
         JButton export = new JButton();
         export.addActionListener(new ActionListener() {
             @Override
@@ -93,8 +100,8 @@ public class SuperMenu {
         export.setFont(new Font("Helvetica",Font.BOLD,20));
         export.setText("Save Changes");
         panel.add(manageConsultantsButton);
-        panel.add(manageAppointmentsButton);
         panel.add(manageAccountsAndPaymentsButton);
+        panel.add(manageAppointmentsButton);
         panel.add(export);
         frame.getContentPane().add(panel);
         frame.pack();

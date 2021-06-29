@@ -1,3 +1,5 @@
+import MediatorPattern.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,43 +11,94 @@ public class SuperMenu {
     WindowListener exitListener = new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent e) {
+//
+//                JFrame frame = new JFrame();
+//                JPanel panel = new JPanel();
+//                panel.setBackground(Color.yellow);
+//                JLabel label = new JLabel();
+//                label.setFont(new Font("Helvetica",Font.BOLD,20));
+//                label.setText("Are you sure you want to exit ?");
+//                JButton yes = new JButton();
+//                yes.setBackground(Color.green);
+//                yes.setFont(new Font("Helvetica",Font.BOLD,20));
+//                yes.setText("Yes");
+//                yes.addActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                JButton no = new JButton();
+//                no.addActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        frame.dispose();
+//                    }
+//                });
+//                no.setBackground(Color.red);
+//                no.setFont(new Font("Helvetica",Font.BOLD,20));
+//                no.setText("No");
+//                panel.add(label);
+//                panel.add(yes);
+//                panel.add(no);
+//                frame.add(panel);
+//                frame.setSize(710, 150);
+//                frame.setLocationRelativeTo(null);
+//                frame.setVisible(true);
+//                frame.setResizable(false);
+//                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//                frame.setTitle("Changes not saved");
+            ConcreteMediator mediator = new ConcreteMediator();
+            SetLabelTextColleague1 setLabelText = new SetLabelTextColleague1(mediator,"Are you sure you want to exit ?");
+            setLabelText.changed();
+            SetLabelFontColleague2 setLabelFont = new SetLabelFontColleague2(mediator,new Font("Helvetica",Font.BOLD,20));
+            setLabelFont.changed();
+            AddLabelToPanelColleague3 addLabel = new AddLabelToPanelColleague3(mediator);
+            addLabel.changed();
+            SetButtonColorColleague4 setButtonColor = new SetButtonColorColleague4(mediator,Color.green);
+            setButtonColor.changed();
+            SetButtonTextColleague6 setButtonText = new SetButtonTextColleague6(mediator,"Yes");
+            setButtonText.changed();
+            SetButtonFontColleague5 setButtonFont = new SetButtonFontColleague5(mediator,new Font("Helvetica",Font.BOLD,20));
+            setButtonFont.changed();
+            SetButtonActionColleague7 setButtonAction = new SetButtonActionColleague7(mediator,new ActionListener()
+            {
+                    @Override
+                        public void actionPerformed(ActionEvent e) {
+                            System.exit(0);
+               }
+              });
+            setButtonAction.changed();
+            AddButtonToPanelColleague8 addButton = new AddButtonToPanelColleague8(mediator);
+            addButton.changed();
 
-                JFrame frame = new JFrame();
-                JPanel panel = new JPanel();
-                panel.setBackground(Color.yellow);
-                JLabel label = new JLabel();
-                label.setFont(new Font("Helvetica",Font.BOLD,20));
-                label.setText("Are you sure you want to exit ?");
-                JButton yes = new JButton();
-                yes.setBackground(Color.green);
-                yes.setFont(new Font("Helvetica",Font.BOLD,20));
-                yes.setText("Yes");
-                yes.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        System.exit(0);
-                    }
-                });
-                JButton no = new JButton();
-                no.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        frame.dispose();
-                    }
-                });
-                no.setBackground(Color.red);
-                no.setFont(new Font("Helvetica",Font.BOLD,20));
-                no.setText("No");
-                panel.add(label);
-                panel.add(yes);
-                panel.add(no);
-                frame.add(panel);
-                frame.setSize(710, 150);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-                frame.setResizable(false);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.setTitle("Changes not saved");
+
+            SetButtonColorColleague4 setButtonColor1 = new SetButtonColorColleague4(mediator,Color.red);
+            setButtonColor1.changed();
+            SetButtonTextColleague6 setButtonText1 = new SetButtonTextColleague6(mediator,"No");
+            setButtonText1.changed();
+            SetButtonFontColleague5 setButtonFont1 = new SetButtonFontColleague5(mediator,new Font("Helvetica",Font.BOLD,20));
+            setButtonFont1.changed();
+            SetButtonActionColleague7 setButtonAction1 = new SetButtonActionColleague7(mediator,new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mediator.getFrame().dispose();
+                }
+            });
+            setButtonAction1.changed();
+            AddButtonToPanelColleague8 addButton1 = new AddButtonToPanelColleague8(mediator);
+            addButton1.changed();
+
+            AddPanelToFrameColleague9 addPanelToFrame = new AddPanelToFrameColleague9(mediator);
+            addPanelToFrame.changed();
+            SetFrameSizeColleague10 setFrameSize = new SetFrameSizeColleague10(mediator,710,150);
+            setFrameSize.changed();
+            SetFrameTitleColleague11 setFrameTitle = new SetFrameTitleColleague11(mediator,"Exit Confirmation");
+            setFrameTitle.changed();
+
+
+
 
         }
     };
